@@ -1,4 +1,7 @@
 import release from '../release';
+import constants from './constants';
+import helpers from './Helpers';
+import classes from './Classes';
 
 const status = {
   initialized: true,
@@ -10,6 +13,9 @@ console.log('GenesiJS initialized', status);
 
 const genesi = {
   status,
+  constants,
+  helpers,
+  classes,
 };
 
 export default genesi;

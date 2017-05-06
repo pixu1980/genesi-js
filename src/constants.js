@@ -1,6 +1,7 @@
-import config from '../config';
+import Evolve from 'evolve-js';
+import release from '../release';
 
-export default Constants = {
+export default {
   // Anchor constants
   TOP_LEFT: 'topleft',
   TOP_RIGHT: 'topright',
@@ -35,22 +36,23 @@ export default Constants = {
   PI2: 6.2831853071,
 
   // Creatine constants
-  VERSION: config.version,
+  VERSION: release.version,
+  BUILD: release.build,
   DEFAULT_CONFIG: {
     environment: {
       debug: false,
-      canvas: {
-        selector: '.game-canvas',
-        width: 1080,
-        height: 1700,
-        showFPS: true,
-      },
       ticker: {
         FPS: 60,
-        timingMode: EaselJS.Ticker.RAF,
+        showFPS: true,
+        timingMode: Evolve.Create.Easel.Ticker.RAF,
+      },
+      canvas: {
+        selector: '.game-canvas',
+        ar: {
+          width: 1920,
+          height: 1080,
+        },
       },
     },
-    game: {}
-  }
-}
-
+  },
+};

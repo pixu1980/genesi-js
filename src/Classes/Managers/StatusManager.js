@@ -1,10 +1,10 @@
-import { EaselJS } from 'elements-js';
+import { Create } from 'evolve-js';
 
 /**
  * @class StatusManager
  * @constructor
  */
-export default class StatusManager extends EaselJS.EventDispatcher {
+export default class StatusManager extends Create.Easel.EventDispatcher {
   constructor(status = 'unknown', phase = 'unknown') {
     super();
 
@@ -21,7 +21,7 @@ export default class StatusManager extends EaselJS.EventDispatcher {
   set status(s) {
     this._status = s;
     this.dispatchEvent({
-      type: 'statusChange'
+      type: 'statusChange',
     });
   }
 
@@ -32,7 +32,7 @@ export default class StatusManager extends EaselJS.EventDispatcher {
   set phase(p) {
     this._phase = p;
     this.dispatchEvent({
-      type: 'statusChange'
+      type: 'statusChange',
     });
   }
 
@@ -51,7 +51,7 @@ export default class StatusManager extends EaselJS.EventDispatcher {
 
   onStatusChange(e) {
     this.dispatchEvent({
-      type: 'statusChanged'
+      type: 'statusChanged',
     }.inherit(true, this.toJS()));
   }
 

@@ -1,4 +1,4 @@
-import { SoundJS, EaselJS, Elements } from 'elements-js';
+import { Create, Elements } from 'evolve-js';
 
 import StatusManager from './Managers/StatusManager';
 import TickerManager from './Managers/TickerManager';
@@ -17,7 +17,7 @@ const $ = window.$;
  * object or an url for a JSON file, and an object containing state 
  * functions.
  *
- * Please consult {{#crossLinkModule "creatine"}}this page
+ * Please consult {{#crossLinkModule 'creatine'}}this page
  * {{/crossLinkModule}} for an overview of these parameters and the usage
  * examples.
  *
@@ -26,7 +26,7 @@ const $ = window.$;
  * @param {Object} [config] Configuration data or path for JSON.
  * @param {Object} [state]  State functions.
  */
-export default class Game extends EaselJS.EventDispatcher {
+export default class Game extends Create.Easel.EventDispatcher {
   /**
    * Init the world, create main loader promise.
    * @memberOf Game
@@ -36,7 +36,7 @@ export default class Game extends EaselJS.EventDispatcher {
    */
   constructor(config, state) {
     super();
-    
+
     let _uniqueID = 0;
 
     /**
@@ -48,7 +48,7 @@ export default class Game extends EaselJS.EventDispatcher {
      */
     this.getNewID = () => {
       return ++_uniqueID;
-    }
+    };
 
     return this.init(config, state);
   }
@@ -59,7 +59,7 @@ export default class Game extends EaselJS.EventDispatcher {
    * 
    * @method _initializeConfig
    * @param {Object} [config] The configuration object.
-   * @return {Object}         The configuration object.
+   * @return {Object} The configuration object.
    * @private
    */
   initConfig(config) {
@@ -130,12 +130,10 @@ export default class Game extends EaselJS.EventDispatcher {
 
         if (!this.canvas) {
           this.canvas = document.createElement('canvas');
-          this.canvas.width = config.width;
-          this.canvas.height = config.height;
-          this.canvas.style.backgroundColor = config.background_color;
-          this.canvas.style.outline = 'none';
+          this.canvas.width = Game.CONFIG.environment.ar.width;
+          this.canvas.height = Game.CONFIG.environment.ar.height;
           this.canvas.setAttribute('tabindex', '0');
-          this.canvas.addEventListener("mousedown", this.canvas.focus, false);
+          this.canvas.addEventListener('mousedown', this.canvas.focus, false);
 
           //TODO: manage canvas target parent and append canvas to it
         }
@@ -163,11 +161,11 @@ export default class Game extends EaselJS.EventDispatcher {
   initStage() {
     return new Promise((resolve, reject) => {
       try {
-        this.stage = new EaselJS.Stage(this.canvas);
+        this.stage = new Create.Easel.Stage(this.canvas);
         this.stage.updateViewport(Game.SHARED.canvas.w, Game.SHARED.canvas.h);
         this.stage.snapToPixelEnabled = true;
         this.stage.enableMouseOver();
-        EaselJS.Touch.enable(this.stage);
+        Create.Easel.Touch.enable(this.stage);
 
         Game.STAGE = this.stageContainer = new Elements.Element({
           parent: this.stage,
@@ -192,7 +190,7 @@ export default class Game extends EaselJS.EventDispatcher {
   initSounds() {
     return new Promise((resolve, reject) => {
       try {
-        SoundJS.initializeDefaultPlugins();
+        Create.Sound.initializeDefaultPlugins();
 
         resolve();
       } catch (error) {
@@ -217,7 +215,6 @@ export default class Game extends EaselJS.EventDispatcher {
       } catch (error) {
         reject(error);
       }
-
     });
   }
 
@@ -306,7 +303,7 @@ export default class Game extends EaselJS.EventDispatcher {
       this.plugins.postUpdate();
       Game.STATUS.phase = 'post-update';
 
-      Game.STATUS.phase = 'updated'
+      Game.STATUS.phase = 'updated';
     });
   }
 
@@ -351,30 +348,30 @@ export default class Game extends EaselJS.EventDispatcher {
     Game.WORLD.updateStatus(options);
   }
 
-    /**
-     * The preload state of the game, called right after the booting and right 
-     * before the preloading process. It calls the state function if provided by 
-     * the user.
-     * 
-     * @method _preload
-     * @private
-     */
-    preload() {
-      if (this.state.preload) this.state.preload(this);
+  /**
+   * The preload state of the game, called right after the booting and right 
+   * before the preloading process. It calls the state function if provided by 
+   * the user.
+   * 
+   * @method _preload
+   * @private
+   */
+  preload() {
+    if (this.state.preload) this.state.preload(this);
 
-      // If all items loaded/no item to load and no manifest
-      if (this.load.isFinished() && !this.config.resources.manifest) {
-        this._create();
+    // If all items loaded/no item to load and no manifest
+    if (this.load.isFinished() && !this.config.resources.manifest) {
+      this._create();
 
-        // Loading item or have manifest
-      } else {
-        this.load.on('complete', this._create, this);
-        if (this.config.resources.manifest) {
-          this.load.manifest(this.config.resources.manifest);
-        }
-        this.load.load();
+      // Loading item or have manifest
+    } else {
+      this.load.on('complete', this._create, this);
+      if (this.config.resources.manifest) {
+        this.load.manifest(this.config.resources.manifest);
       }
+      this.load.load();
     }
+  }
 
 
   /**
@@ -459,19 +456,6 @@ export default class Game extends EaselJS.EventDispatcher {
       },
     });
 
-    Game.WORLD = this.gameElement = new GameElement({
-      parent: Game.STAGE,
-      align: 'center top',
-      size: '100%',
-      colors: Game.CONFIG.game.colors,
-      prizes: Game.CONFIG.game.prizes,
-      tiles: options.tiles,
-      steps: options.steps,
-      showAll: {
-        started: false,
-        tileButtonToClick: 0,
-      },
-    });
 
     //return new Promise((resolve) => {
     //  this.INTERACTIVE_AREA.animate();
@@ -511,7 +495,7 @@ export default class Game extends EaselJS.EventDispatcher {
   bindEvents() {
     window.onresize = this.onResize.proxy(this);
 
-    EaselJS.EventDispatcher.initialize(this);
+    Create.Easel.EventDispatcher.initialize(this);
 
     this.addEventListener('startGame', this.onStartGame.proxy(this));
     this.addEventListener('endGame', this.onEndGame.proxy(this));
