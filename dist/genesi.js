@@ -215,6 +215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		var _createEs6Js = __webpack_require__(2);
 		
+		var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
+		
 		var _ElementHelpers = __webpack_require__(3);
 		
 		var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
@@ -238,8 +240,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		 * @type {Element}
 		 * @public
 		 */
-		var Element = function (_Easel$Container) {
-		  _inherits(Element, _Easel$Container);
+		var Element = function (_Create$Easel$Contain) {
+		  _inherits(Element, _Create$Easel$Contain);
 		
 		  function Element() {
 		    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -603,7 +605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      if (!!this.settings.mask) {
 		        this.maskShape = this.settings.mask;
 		
-		        if (!(this.settings.mask instanceof _createEs6Js.Easel.Shape) && !(this.settings.mask instanceof _createEs6Js.Easel.DisplayObject)) {
+		        if (!(this.settings.mask instanceof _createEs6Js2.default.Easel.Shape) && !(this.settings.mask instanceof _createEs6Js2.default.Easel.DisplayObject)) {
 		          this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
 		
 		          if (Object.isObject(this.settings.mask)) {
@@ -659,8 +661,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		          if (Object.isObject(this.settings.shadow)) {
 		            var shadowSettings = [this.settings.shadow.color, this.settings.shadow.x, this.settings.shadow.y, this.settings.shadow.blur];
 		
-		            shadow = new (Function.prototype.bind.apply(_createEs6Js.Easel.Shadow, [null].concat(shadowSettings)))();
-		          } else if (this.settings.shadow instanceof _createEs6Js.Easel.Shadow) {
+		            shadow = new (Function.prototype.bind.apply(_createEs6Js2.default.Easel.Shadow, [null].concat(shadowSettings)))();
+		          } else if (this.settings.shadow instanceof _createEs6Js2.default.Easel.Shadow) {
 		            shadow = this.settings.shadow;
 		          }
 		
@@ -855,7 +857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }]);
 		
 		  return Element;
-		}(_createEs6Js.Easel.Container);
+		}(_createEs6Js2.default.Easel.Container);
 		
 		exports.default = Element;
 	
@@ -987,7 +989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		/* 1 */
 		/***/ (function(module, exports, __webpack_require__) {
 		
-			var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(createjs, module, global) {/*!
+			var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*!
 			* CreateJS
 			* Visit http://createjs.com/ for documentation, updates and examples.
 			*
@@ -27997,7 +27999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			
 			module.exports = scope.createjs;
 			
-			/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)(module), (function() { return this; }())))
+			/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 		
 		/***/ }),
 		/* 2 */
@@ -28022,7 +28024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 			
 			module.export = {
-			  version: '0.0.9',
+			  version: '0.1.1',
 			  build: new Date()
 			};
 			/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
@@ -28252,6 +28254,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		var _createEs6Js = __webpack_require__(2);
 		
+		var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
+		
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+		
 		function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 		
 		function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28401,7 +28407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      if (horizontalModes.contains(modes)) {
 		        if (modes.contains('center')) {
 		          position.inherit({
-		            x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof _createEs6Js.Easel.Bitmap) ? elementBounds.width * 0.5 : 0)
+		            x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof _createEs6Js2.default.Easel.Bitmap) ? elementBounds.width * 0.5 : 0)
 		          });
 		        } else if (modes.contains('left')) {
 		          position.inherit({
@@ -28417,7 +28423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      if (verticalModes.contains(modes)) {
 		        if (modes.contains('middle')) {
 		          position.inherit({
-		            y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof _createEs6Js.Easel.Bitmap) ? elementBounds.width * 0.5 : 0)
+		            y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof _createEs6Js2.default.Easel.Bitmap) ? elementBounds.width * 0.5 : 0)
 		          });
 		        } else if (modes.contains('top')) {
 		          position.inherit({
@@ -28452,7 +28458,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }, {
 		    key: 'createContainer',
 		    value: function createContainer() {
-		      var container = new _createEs6Js.Easel.Container().inherit({
+		      var container = new _createEs6Js2.default.Easel.Container().inherit({
 		        x: arguments.length <= 0 ? undefined : arguments[0],
 		        y: arguments.length <= 1 ? undefined : arguments[1]
 		      });
@@ -28498,7 +28504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		      var settings = defaults.inherit(true, options);
 		
-		      var graphics = new _createEs6Js.Easel.Graphics();
+		      var graphics = new _createEs6Js2.default.Easel.Graphics();
 		
 		      if (!!settings.fill) {
 		        if (Object.isObject(settings.fill)) {
@@ -28579,7 +28585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      graphics.endFill();
 		      graphics.endStroke();
 		
-		      var rect = new _createEs6Js.Easel.Shape(graphics);
+		      var rect = new _createEs6Js2.default.Easel.Shape(graphics);
 		      rect.setBounds.apply(rect, bounds);
 		
 		      return rect;
@@ -28628,7 +28634,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      var graphics = this.createGraphics.apply(this, [settings].concat(bounds));
 		      graphics.drawCircle(0, 0, settings.radius);
 		
-		      var circle = new _createEs6Js.Easel.Shape(graphics);
+		      var circle = new _createEs6Js2.default.Easel.Shape(graphics);
 		      circle.setBounds.apply(circle, bounds);
 		
 		      return circle;
@@ -28648,7 +28654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }, {
 		    key: 'createText',
 		    value: function createText(text, font, color) {
-		      return new _createEs6Js.Easel.Text(text, font, color);
+		      return new _createEs6Js2.default.Easel.Text(text, font, color);
 		    }
 		
 		    /**
@@ -28663,7 +28669,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }, {
 		    key: 'createImage',
 		    value: function createImage(image) {
-		      return new _createEs6Js.Easel.Bitmap(image);
+		      return new _createEs6Js2.default.Easel.Bitmap(image);
 		    }
 		
 		    /**
@@ -28678,7 +28684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }, {
 		    key: 'createSprite',
 		    value: function createSprite(spritesheet) {
-		      return new _createEs6Js.Easel.Sprite(spritesheet);
+		      return new _createEs6Js2.default.Easel.Sprite(spritesheet);
 		    }
 		  }]);
 		
@@ -29210,6 +29216,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		var _createEs6Js = __webpack_require__(2);
 		
+		var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
+		
 		var _ElementHelpers = __webpack_require__(3);
 		
 		var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
@@ -29366,7 +29374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		          lineHeight: this.settings.lineHeight || null,
 		          lineWidth: this.settings.maxWidth || null,
 		          outline: this.settings.outline.size,
-		          shadow: !!this.settings.shadow ? new (Function.prototype.bind.apply(_createEs6Js.Easel.Shadow, [null].concat(_toConsumableArray(this.settings.shadow))))() : null
+		          shadow: !!this.settings.shadow ? new (Function.prototype.bind.apply(_createEs6Js2.default.Easel.Shadow, [null].concat(_toConsumableArray(this.settings.shadow))))() : null
 		        });
 		      }
 		
@@ -29375,7 +29383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		        textBaseline: 'middle',
 		        lineHeight: this.settings.lineHeight || null,
 		        lineWidth: this.settings.maxWidth || null,
-		        shadow: !!this.settings.shadow ? new (Function.prototype.bind.apply(_createEs6Js.Easel.Shadow, [null].concat(_toConsumableArray(this.settings.shadow))))() : null
+		        shadow: !!this.settings.shadow ? new (Function.prototype.bind.apply(_createEs6Js2.default.Easel.Shadow, [null].concat(_toConsumableArray(this.settings.shadow))))() : null
 		      });
 		
 		      this.computeBounds();
@@ -29515,6 +29523,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		var _createEs6Js = __webpack_require__(2);
 		
+		var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
+		
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+		
 		function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 		
 		var SoundElement = function () {
@@ -29522,7 +29534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		    _classCallCheck(this, SoundElement);
 		
 		    this.defaults = {
-		      interrupt: _createEs6Js.SoundJS.Sound.INTERRUPT_ANY,
+		      interrupt: _createEs6Js2.default.Sound.INTERRUPT_ANY,
 		      loop: 0,
 		      delay: 0,
 		      offset: 0,
@@ -29549,7 +29561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		        soundProps.volume = 0;
 		      }
 		
-		      this.instance = _createEs6Js.SoundJS.Sound.play(this.props.sound, soundProps);
+		      this.instance = _createEs6Js2.default.Sound.play(this.props.sound, soundProps);
 		
 		      var eventsDefined = !!this.props.events;
 		
@@ -46668,7 +46680,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		'use strict';
 		
 		module.exports = {
-		  version: '0.0.6',
+		  version: '0.0.8',
 		  build: new Date()
 		};
 	
@@ -47234,6 +47246,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		var _createEs6Js = __webpack_require__(2);
 		
+		var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
+		
 		var _SoundElement = __webpack_require__(9);
 		
 		var _SoundElement2 = _interopRequireDefault(_SoundElement);
@@ -47255,7 +47269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      console.log('adding layer ', props);
 		      var instance = new _SoundElement2.default(props);
 		      SoundManager._instances = [];
-		      _createEs6Js.Sound.Ticker.addEventListener('tick', SoundManager.handleSoundTick);
+		      _createEs6Js2.default.Sound.Ticker.addEventListener('tick', SoundManager.handleSoundTick);
 		      SoundManager.addLayer(instance);
 		
 		      instance.instance.on('complete', function () {
@@ -47310,12 +47324,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }, {
 		    key: 'mute',
 		    value: function mute() {
-		      _createEs6Js.Sound.Sound.muted = true;
+		      _createEs6Js2.default.Sound.muted = true;
 		    }
 		  }, {
 		    key: 'unmute',
 		    value: function unmute() {
-		      _createEs6Js.Sound.Sound.muted = false;
+		      _createEs6Js2.default.Sound.muted = false;
 		    }
 		  }]);
 		
@@ -47491,7 +47505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	module.exports = {
-	  version: '0.0.4',
+	  version: '0.0.5',
 	  build: new Date()
 	};
 

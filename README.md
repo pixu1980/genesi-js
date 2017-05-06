@@ -1,7 +1,7 @@
 # genesi-js
 
-## Note on GenesiJS v0.0.4
-For GenesiJS v0.0.4 and next releases, I'm trying to keep things more data-driven. So it can be easily extended by a visual editor or other 3th-party editors.
+## Note on GenesiJS v0.0.5
+For GenesiJS v0.0.5 and next releases, I'm trying to keep things more data-driven. So it can be easily extended by a visual editor or other 3th-party editors.
 
 ## Genesi JS
 Genesi (Game Engine Next Evolution Step Interfaces)  a Game Engine and Dev Environment built over EvolveJS libraries.
