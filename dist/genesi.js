@@ -160,6 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		Object.defineProperty(exports, "__esModule", {
 		  value: true
 		});
+		exports.Translations = exports.Sounds = exports.Elements = exports.Create = undefined;
 		
 		var _createEs6Js = __webpack_require__(2);
 		
@@ -200,6 +201,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 		
 		exports.default = evolve;
+		exports.Create = _createEs6Js2.default;
+		exports.Elements = _Elements2.default;
+		exports.Sounds = _Sounds2.default;
+		exports.Translations = _Translations2.default;
 	
 	/***/ }),
 	/* 1 */
@@ -46680,7 +46685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		'use strict';
 		
 		module.exports = {
-		  version: '0.0.8',
+		  version: '0.0.9',
 		  build: new Date()
 		};
 	
@@ -47505,7 +47510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	module.exports = {
-	  version: '0.0.5',
+	  version: '0.0.6',
 	  build: new Date()
 	};
 
