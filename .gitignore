@@ -29,6 +29,3 @@ bower_components/
 # NPM packages folder.
 node_modules/
 
-# Brunch output folder.
-dist/
-public/
