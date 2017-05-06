@@ -1,4 +1,4 @@
-import Evolve from 'evolve-js';
+import {Easel} from 'evolve-js';
 import release from '../release';
 
 export default {
@@ -44,7 +44,7 @@ export default {
       ticker: {
         FPS: 60,
         showFPS: true,
-        timingMode: Evolve.Create.Easel.Ticker.RAF,
+        timingMode: Easel.Ticker.RAF,
       },
       canvas: {
         selector: '.game-canvas',

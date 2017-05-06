@@ -1,4 +1,4 @@
-import { Create, Elements } from 'evolve-js';
+import { Easel, Elements } from 'evolve-js';
 
 import StatusManager from './Managers/StatusManager';
 import TickerManager from './Managers/TickerManager';
@@ -26,7 +26,7 @@ const $ = window.$;
  * @param {Object} [config] Configuration data or path for JSON.
  * @param {Object} [state]  State functions.
  */
-export default class Game extends Create.Easel.EventDispatcher {
+export default class Game extends Easel.EventDispatcher {
   /**
    * Init the world, create main loader promise.
    * @memberOf Game
@@ -161,11 +161,11 @@ export default class Game extends Create.Easel.EventDispatcher {
   initStage() {
     return new Promise((resolve, reject) => {
       try {
-        this.stage = new Create.Easel.Stage(this.canvas);
+        this.stage = new Easel.Stage(this.canvas);
         this.stage.updateViewport(Game.SHARED.canvas.w, Game.SHARED.canvas.h);
         this.stage.snapToPixelEnabled = true;
         this.stage.enableMouseOver();
-        Create.Easel.Touch.enable(this.stage);
+        Easel.Touch.enable(this.stage);
 
         Game.STAGE = this.stageContainer = new Elements.Element({
           parent: this.stage,
@@ -190,7 +190,7 @@ export default class Game extends Create.Easel.EventDispatcher {
   initSounds() {
     return new Promise((resolve, reject) => {
       try {
-        Create.Sound.initializeDefaultPlugins();
+        // Sound.initializeDefaultPlugins();
 
         resolve();
       } catch (error) {
@@ -495,7 +495,7 @@ export default class Game extends Create.Easel.EventDispatcher {
   bindEvents() {
     window.onresize = this.onResize.proxy(this);
 
-    Create.Easel.EventDispatcher.initialize(this);
+    Easel.EventDispatcher.initialize(this);
 
     this.addEventListener('startGame', this.onStartGame.proxy(this));
     this.addEventListener('endGame', this.onEndGame.proxy(this));

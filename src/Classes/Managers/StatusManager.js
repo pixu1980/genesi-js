@@ -1,10 +1,10 @@
-import { Create } from 'evolve-js';
+import { Easel } from 'evolve-js';
 
 /**
  * @class StatusManager
  * @constructor
  */
-export default class StatusManager extends Create.Easel.EventDispatcher {
+export default class StatusManager extends Easel.EventDispatcher {
   constructor(status = 'unknown', phase = 'unknown') {
     super();
 

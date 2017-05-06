@@ -59,7 +59,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Sounds = exports.Elements = exports.Create = undefined;
+	exports.Sounds = exports.Elements = exports.Preload = exports.Tween = exports.Easel = undefined;
 	
 	var _evolveJs = __webpack_require__(1);
 	
@@ -94,13 +94,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  constants: _constants2.default,
 	  helpers: _Helpers2.default,
 	  classes: _Classes2.default,
-	  Create: _evolveJs.Create,
+	  Easel: _evolveJs.Easel,
+	  Tween: _evolveJs.Tween,
+	  Preload: _evolveJs.Preload,
 	  Elements: _evolveJs.Elements,
 	  Sounds: _evolveJs.Sounds
 	};
 	
 	exports.default = genesi;
-	exports.Create = _evolveJs.Create;
+	exports.Easel = _evolveJs.Easel;
+	exports.Tween = _evolveJs.Tween;
+	exports.Preload = _evolveJs.Preload;
 	exports.Elements = _evolveJs.Elements;
 	exports.Sounds = _evolveJs.Sounds;
 
@@ -169,11 +173,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		Object.defineProperty(exports, "__esModule", {
 		  value: true
 		});
-		exports.Sounds = exports.Elements = exports.Create = undefined;
+		exports.Sounds = exports.Elements = exports.Preload = exports.Tween = exports.Easel = undefined;
 		
 		var _createEs6Js = __webpack_require__(2);
-		
-		var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
 		
 		var _Elements = __webpack_require__(14);
 		
@@ -198,14 +200,18 @@ return /******/ (function(modules) { // webpackBootstrap
 		console.log('EvolveJS initialized', status);
 		
 		var evolve = {
-		  Create: _createEs6Js2.default,
+		  Easel: _createEs6Js.Easel,
+		  Tween: _createEs6Js.Tween,
+		  Preload: _createEs6Js.Preload,
 		  Elements: _Elements2.default,
 		  Sounds: _Sounds2.default,
 		  status: status
 		};
 		
 		exports.default = evolve;
-		exports.Create = _createEs6Js2.default;
+		exports.Easel = _createEs6Js.Easel;
+		exports.Tween = _createEs6Js.Tween;
+		exports.Preload = _createEs6Js.Preload;
 		exports.Elements = _Elements2.default;
 		exports.Sounds = _Sounds2.default;
 	
@@ -2222,7 +2228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		'use strict';
 		
 		module.exports = {
-		  version: '0.1.1',
+		  version: '0.1.2',
 		  build: new Date()
 		};
 	
@@ -2916,7 +2922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	module.exports = {
-	  version: '0.0.8',
+	  version: '0.1.0',
 	  build: new Date()
 	};
 
@@ -2931,8 +2937,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	var _evolveJs = __webpack_require__(1);
-	
-	var _evolveJs2 = _interopRequireDefault(_evolveJs);
 	
 	var _release = __webpack_require__(2);
 	
@@ -2983,7 +2987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ticker: {
 	        FPS: 60,
 	        showFPS: true,
-	        timingMode: _evolveJs2.default.Create.Easel.Ticker.RAF
+	        timingMode: _evolveJs.Easel.Ticker.RAF
 	      },
 	      canvas: {
 	        selector: '.game-canvas',
@@ -3054,8 +3058,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Object} [state]  State functions.
 	 */
 	
-	var Game = function (_Create$Easel$EventDi) {
-	  _inherits(Game, _Create$Easel$EventDi);
+	var Game = function (_Easel$EventDispatche) {
+	  _inherits(Game, _Easel$EventDispatche);
 	
 	  /**
 	   * Init the world, create main loader promise.
@@ -3211,11 +3215,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return new Promise(function (resolve, reject) {
 	        try {
-	          _this3.stage = new _evolveJs.Create.Easel.Stage(_this3.canvas);
+	          _this3.stage = new _evolveJs.Easel.Stage(_this3.canvas);
 	          _this3.stage.updateViewport(Game.SHARED.canvas.w, Game.SHARED.canvas.h);
 	          _this3.stage.snapToPixelEnabled = true;
 	          _this3.stage.enableMouseOver();
-	          _evolveJs.Create.Easel.Touch.enable(_this3.stage);
+	          _evolveJs.Easel.Touch.enable(_this3.stage);
 	
 	          Game.STAGE = _this3.stageContainer = new _evolveJs.Elements.Element({
 	            parent: _this3.stage,
@@ -3241,7 +3245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function initSounds() {
 	      return new Promise(function (resolve, reject) {
 	        try {
-	          _evolveJs.Create.Sound.initializeDefaultPlugins();
+	          // Sound.initializeDefaultPlugins();
 	
 	          resolve();
 	        } catch (error) {
@@ -3580,7 +3584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function bindEvents() {
 	      window.onresize = this.onResize.proxy(this);
 	
-	      _evolveJs.Create.Easel.EventDispatcher.initialize(this);
+	      _evolveJs.Easel.EventDispatcher.initialize(this);
 	
 	      this.addEventListener('startGame', this.onStartGame.proxy(this));
 	      this.addEventListener('endGame', this.onEndGame.proxy(this));
@@ -3594,7 +3598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return Game;
-	}(_evolveJs.Create.Easel.EventDispatcher);
+	}(_evolveJs.Easel.EventDispatcher);
 	
 	/**
 	 * CANVAS Object represents canvas
@@ -3671,8 +3675,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @class StatusManager
 	 * @constructor
 	 */
-	var StatusManager = function (_Create$Easel$EventDi) {
-	  _inherits(StatusManager, _Create$Easel$EventDi);
+	var StatusManager = function (_Easel$EventDispatche) {
+	  _inherits(StatusManager, _Easel$EventDispatche);
 	
 	  function StatusManager() {
 	    var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'unknown';
@@ -3753,7 +3757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return StatusManager;
-	}(_evolveJs.Create.Easel.EventDispatcher);
+	}(_evolveJs.Easel.EventDispatcher);
 	
 	exports.default = StatusManager;
 
@@ -3794,8 +3798,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @class TickerManager
 	 * @constructor
 	 */
-	var TickerManager = function (_Create$Easel$EventDi) {
-	  _inherits(TickerManager, _Create$Easel$EventDi);
+	var TickerManager = function (_Easel$EventDispatche) {
+	  _inherits(TickerManager, _Easel$EventDispatche);
 	
 	  function TickerManager(options) {
 	    _classCallCheck(this, TickerManager);
@@ -3804,7 +3808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _this.defaults = {
 	      fps: 30,
-	      mode: _evolveJs.Create.Easel.Ticker.RAF
+	      mode: _evolveJs.Easel.Ticker.RAF
 	    };
 	
 	    _this.settings = _this.defaults.inherit(true, options);
@@ -3820,15 +3824,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(TickerManager, [{
 	    key: 'init',
 	    value: function init() {
-	      _evolveJs.Create.Easel.Ticker.framerate = this._fps;
-	      _evolveJs.Create.Easel.Ticker.timingMode = this._mode;
+	      _evolveJs.Easel.Ticker.framerate = this._fps;
+	      _evolveJs.Easel.Ticker.timingMode = this._mode;
 	
 	      this.bindEvents();
 	    }
 	  }, {
 	    key: 'bindEvents',
 	    value: function bindEvents() {
-	      _evolveJs.Create.Easel.Ticker.on('tick', this.onTick.bind(this));
+	      _evolveJs.Easel.Ticker.on('tick', this.onTick.bind(this));
 	    }
 	  }, {
 	    key: 'onTick',
@@ -3884,7 +3888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return TickerManager;
-	}(_evolveJs.Create.Easel.EventDispatcher);
+	}(_evolveJs.Easel.EventDispatcher);
 	
 	exports.default = TickerManager;
 

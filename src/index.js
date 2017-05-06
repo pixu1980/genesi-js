@@ -1,4 +1,4 @@
-import {Create, Elements, Sounds} from 'evolve-js';
+import { Easel, Tween, Preload, Elements, Sounds } from 'evolve-js';
 
 import constants from './constants';
 import helpers from './Helpers';
@@ -19,7 +19,9 @@ const genesi = {
   constants,
   helpers,
   classes,
-  Create,
+  Easel,
+  Tween,
+  Preload,
   Elements,
   Sounds,
 };
@@ -27,7 +29,9 @@ const genesi = {
 export default genesi;
 
 export {
-  Create,
+  Easel,
+  Tween,
+  Preload,
   Elements,
   Sounds,
 };

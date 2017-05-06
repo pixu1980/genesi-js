@@ -1,4 +1,4 @@
-import { Create } from 'evolve-js';
+import { Easel } from 'evolve-js';
 
 /**
  * The time manager is a helper to handle the createjs global Ticker. It is 
@@ -17,13 +17,13 @@ import { Create } from 'evolve-js';
  * @class TickerManager
  * @constructor
  */
-export default class TickerManager extends Create.Easel.EventDispatcher {
+export default class TickerManager extends Easel.EventDispatcher {
   constructor(options) {
     super();
 
     this.defaults = {
       fps: 30,
-      mode: Create.Easel.Ticker.RAF,
+      mode: Easel.Ticker.RAF,
     };
 
     this.settings = this.defaults.inherit(true, options);
@@ -64,14 +64,14 @@ export default class TickerManager extends Create.Easel.EventDispatcher {
   }
 
   init() {
-    Create.Easel.Ticker.framerate = this._fps;
-    Create.Easel.Ticker.timingMode = this._mode;
+    Easel.Ticker.framerate = this._fps;
+    Easel.Ticker.timingMode = this._mode;
 
     this.bindEvents();
   }
 
   bindEvents() {
-    Create.Easel.Ticker.on('tick', this.onTick.bind(this));
+    Easel.Ticker.on('tick', this.onTick.bind(this));
   }
 
   onTick(e) {
