@@ -1,13 +1,13 @@
-import { Easel, Elements } from 'evolve-js';
+import { Draw, Sound, Elements } from 'evolve-js';
 
-import StatusManager from './Managers/StatusManager';
-import TickerManager from './Managers/TickerManager';
+import Core from '../Core';
+import Constants from '../Constants';
+import Managers from '../Managers';
 
 // import Preload from './Preload';
 // import GameElement from './Game/GameElement';
 // import Editor from './Game/Editor/Editor';
 // import ModalController from './Game/Modals/ModalController';
-import constants from '../constants';
 
 const $ = window.$;
 
@@ -26,7 +26,7 @@ const $ = window.$;
  * @param {Object} [config] Configuration data or path for JSON.
  * @param {Object} [state]  State functions.
  */
-export default class Game extends Easel.EventDispatcher {
+export default class Game extends Core.EventDispatcher {
   /**
    * Init the world, create main loader promise.
    * @memberOf Game
@@ -65,14 +65,14 @@ export default class Game extends Easel.EventDispatcher {
   initConfig(config) {
     return new Promise((resolve, reject) => {
       try {
-        Game.CONFIG = {}.inherit(constants.DEFAULT_CONFIG, config, {
+        Game.CONFIG = {}.inherit(Constants.DEFAULT_CONFIG, config, {
           environment: {
             canvas: {
-              width: (!Number.isNumber(Game.CONFIG.environment.canvas.width) ? constants.DEFAULT_CONFIG.environment.canvas.width : Game.CONFIG.environment.canvas.width),
-              height: (!Number.isNumber(Game.CONFIG.environment.canvas.height) ? constants.DEFAULT_CONFIG.environment.canvas.height : Game.CONFIG.environment.canvas.height),
+              width: (!Number.isNumber(Game.CONFIG.environment.canvas.width) ? Constants.DEFAULT_CONFIG.environment.canvas.width : Game.CONFIG.environment.canvas.width),
+              height: (!Number.isNumber(Game.CONFIG.environment.canvas.height) ? Constants.DEFAULT_CONFIG.environment.canvas.height : Game.CONFIG.environment.canvas.height),
             },
             ticker: {
-              FPS: (!Number.isNumber(Game.CONFIG.environment.ticker.FPS) ? constants.DEFAULT_CONFIG.environment.ticker.FPS : Game.CONFIG.environment.ticker.FPS),
+              FPS: (!Number.isNumber(Game.CONFIG.environment.ticker.FPS) ? Constants.DEFAULT_CONFIG.environment.ticker.FPS : Game.CONFIG.environment.ticker.FPS),
             },
           },
         });
@@ -161,11 +161,11 @@ export default class Game extends Easel.EventDispatcher {
   initStage() {
     return new Promise((resolve, reject) => {
       try {
-        this.stage = new Easel.Stage(this.canvas);
+        this.stage = new Draw.Stage(this.canvas);
         this.stage.updateViewport(Game.SHARED.canvas.w, Game.SHARED.canvas.h);
         this.stage.snapToPixelEnabled = true;
         this.stage.enableMouseOver();
-        Easel.Touch.enable(this.stage);
+        Core.Touch.enable(this.stage);
 
         Game.STAGE = this.stageContainer = new Elements.Element({
           parent: this.stage,
@@ -190,7 +190,7 @@ export default class Game extends Easel.EventDispatcher {
   initSounds() {
     return new Promise((resolve, reject) => {
       try {
-        // Sound.initializeDefaultPlugins();
+        Sound.Sound.initializeDefaultPlugins();
 
         resolve();
       } catch (error) {
@@ -208,7 +208,7 @@ export default class Game extends Easel.EventDispatcher {
   initTicker() {
     return new Promise((resolve, reject) => {
       try {
-        Game.TICKER = new TickerManager(Game.CONFIG.environment.ticker);
+        Game.TICKER = new Managers.TickerManager(Game.CONFIG.environment.ticker);
         Game.TICKER.on('ticker', this.onTick.bind(this));
 
         resolve();
@@ -227,7 +227,7 @@ export default class Game extends Easel.EventDispatcher {
    * @private
    */
   init(config, state) {
-    Game.STATUS = new StatusManager('init', 'warmup');
+    Game.STATUS = new Managers.StatusManager('init', 'warmup');
 
     return new Promise((resolve, reject) => {
       Game.STATUS.phase = 'config';
@@ -414,13 +414,13 @@ export default class Game extends Easel.EventDispatcher {
       },
     });
 
-    Elements.ElementHelpers.setBoxSize(this.canvas, Game.SHARED.canvas.scaledW, Game.SHARED.canvas.scaledH, true);
+    Elements.Helpers.setBoxSize(this.canvas, Game.SHARED.canvas.scaledW, Game.SHARED.canvas.scaledH, true);
 
     if (!this.stage) {
       return;
     }
 
-    Elements.ElementHelpers.scale(this.stage, Game.SHARED.scale);
+    Elements.Helpers.scale(this.stage, Game.SHARED.scale);
 
     this.stage.update();
   }
@@ -495,7 +495,7 @@ export default class Game extends Easel.EventDispatcher {
   bindEvents() {
     window.onresize = this.onResize.proxy(this);
 
-    Easel.EventDispatcher.initialize(this);
+    Core.EventDispatcher.initialize(this);
 
     this.addEventListener('startGame', this.onStartGame.proxy(this));
     this.addEventListener('endGame', this.onEndGame.proxy(this));

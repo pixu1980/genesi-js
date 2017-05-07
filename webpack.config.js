@@ -34,9 +34,18 @@ module.exports = {
       _: 'lodash',
       ƒ: 'flavor-js',
       'evolve-js': 'evolve-js',
-      'create-es6-js': 'create-es6-js',
     }),
     new webpack.optimize.OccurrenceOrderPlugin,
+    // Uglify debug
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: false,
+      minimize: true,
+      sourceMap: true,
+      compress: true,
+      output: {
+        comments: false,
+      },
+    }),
     // new webpack.optimize.UglifyJsPlugin({
     //   mangle: true,
     //   minimize: true,

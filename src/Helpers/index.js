@@ -1,5 +1,7 @@
 import Ajax from './Ajax';
 
-export default {
+const helpers = {
   Ajax,
 };
+
+export default helpers;

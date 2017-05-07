@@ -1,10 +1,10 @@
-import { Easel } from 'evolve-js';
+import Core from '../Core';
 
 /**
  * @class StatusManager
  * @constructor
  */
-export default class StatusManager extends Easel.EventDispatcher {
+export default class StatusManager extends Core.EventDispatcher {
   constructor(status = 'unknown', phase = 'unknown') {
     super();
 

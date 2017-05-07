@@ -1,8 +1,10 @@
-import { Easel, Tween, Preload, Elements, Sounds } from 'evolve-js';
+import {Draw, Anim, Preload, Sound, Elements} from 'evolve-js';
 
-import constants from './constants';
-import helpers from './Helpers';
-import classes from './Classes';
+import Core from './Core';
+import Constants from './Constants';
+import Helpers from './Helpers';
+import Managers from './Managers';
+import Game from './Game';
 
 import release from '../release';
 
@@ -15,23 +17,30 @@ const status = {
 console.log('GenesiJS initialized', status);
 
 const genesi = {
-  status,
-  constants,
-  helpers,
-  classes,
-  Easel,
-  Tween,
+  Core,
+  Draw,
+  Anim,
   Preload,
+  Sound,
   Elements,
-  Sounds,
+  Constants,
+  Helpers,
+  Managers,
+  Game,
+  status,
 };
 
 export default genesi;
 
 export {
-  Easel,
-  Tween,
+  Core,
+  Draw,
+  Anim,
   Preload,
+  Sound,
   Elements,
-  Sounds,
+  Constants,
+  Helpers,
+  Managers,
+  Game,
 };

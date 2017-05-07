@@ -1,5 +1,5 @@
-import {Easel} from 'evolve-js';
-import release from '../release';
+import Core from '../Core';
+import release from '../../release';
 
 export default {
   // Anchor constants
@@ -44,7 +44,7 @@ export default {
       ticker: {
         FPS: 60,
         showFPS: true,
-        timingMode: Easel.Ticker.RAF,
+        timingMode: Core.Ticker.RAF,
       },
       canvas: {
         selector: '.game-canvas',
