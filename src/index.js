@@ -1,10 +1,10 @@
-import {Draw, Anim, Preload, Sound, Elements} from 'evolve-js';
+import {Draw, Anim, Preload, Sound, Elements, Components} from 'evolve-js';
 
 import Core from './Core';
 import Constants from './Constants';
 import Helpers from './Helpers';
 import Managers from './Managers';
-import Game from './Game';
+import Engine from './Engine';
 
 import release from '../release';
 
@@ -23,10 +23,11 @@ const genesi = {
   Preload,
   Sound,
   Elements,
+  Components,
   Constants,
   Helpers,
   Managers,
-  Game,
+  Engine,
   status,
 };
 
@@ -39,8 +40,9 @@ export {
   Preload,
   Sound,
   Elements,
+  Components,
   Constants,
   Helpers,
   Managers,
-  Game,
+  Engine,
 };

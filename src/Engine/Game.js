@@ -34,7 +34,7 @@ export default class Game extends Core.EventDispatcher {
    * @instance
    * @return {Promise.<TResult>}
    */
-  constructor(config, state) {
+  constructor(config, locales) {
     super();
 
     let _uniqueID = 0;
@@ -50,70 +50,7 @@ export default class Game extends Core.EventDispatcher {
       return ++_uniqueID;
     };
 
-    return this.init(config, state);
-  }
-
-  /**
-   * Validate the configuration object provided by the user. It merges the 
-   * argument with the default options if necessary.
-   * 
-   * @method _initializeConfig
-   * @param {Object} [config] The configuration object.
-   * @return {Object} The configuration object.
-   * @private
-   */
-  initConfig(config) {
-    return new Promise((resolve, reject) => {
-      try {
-        Game.CONFIG = {}.inherit(Constants.DEFAULT_CONFIG, config, {
-          environment: {
-            canvas: {
-              width: (!Number.isNumber(Game.CONFIG.environment.canvas.width) ? Constants.DEFAULT_CONFIG.environment.canvas.width : Game.CONFIG.environment.canvas.width),
-              height: (!Number.isNumber(Game.CONFIG.environment.canvas.height) ? Constants.DEFAULT_CONFIG.environment.canvas.height : Game.CONFIG.environment.canvas.height),
-            },
-            ticker: {
-              FPS: (!Number.isNumber(Game.CONFIG.environment.ticker.FPS) ? Constants.DEFAULT_CONFIG.environment.ticker.FPS : Game.CONFIG.environment.ticker.FPS),
-            },
-          },
-        });
-
-        resolve(Game.CONFIG);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
-
-
-  /**
-   * initializes shared data of the game world
-   * @memberOf Game
-   * @method initShared
-   * @instance
-   */
-  initShared() {
-    return new Promise((resolve, reject) => {
-      try {
-        Game.SHARED.inherit({
-          scale: Math.min(window.innerWidth / Game.CONFIG.environment.canvas.width, window.innerHeight / Game.CONFIG.environment.canvas.height),
-          canvas: {
-            w: Game.CONFIG.environment.canvas.width,
-            h: Game.CONFIG.environment.canvas.height,
-          },
-        });
-
-        Game.SHARED.inherit({
-          canvas: {
-            scaledW: Game.SHARED.canvas.w * Game.SHARED.scale,
-            scaledH: Game.SHARED.canvas.h * Game.SHARED.scale,
-          },
-        });
-
-        resolve(Game.SHARED);
-      } catch (error) {
-        reject(error);
-      }
-    });
+    return this.init(config, locales);
   }
 
   /**
@@ -187,17 +124,6 @@ export default class Game extends Core.EventDispatcher {
     });
   }
 
-  initSounds() {
-    return new Promise((resolve, reject) => {
-      try {
-        Sound.Sound.initializeDefaultPlugins();
-
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
 
   /**
    * @todo
@@ -208,8 +134,6 @@ export default class Game extends Core.EventDispatcher {
   initTicker() {
     return new Promise((resolve, reject) => {
       try {
-        Game.TICKER = new Managers.TickerManager(Game.CONFIG.environment.ticker);
-        Game.TICKER.on('ticker', this.onTick.bind(this));
 
         resolve();
       } catch (error) {
@@ -223,54 +147,47 @@ export default class Game extends Core.EventDispatcher {
    * 
    * @method _initialize
    * @param {Object} [config] The configuration objects.
-   * @param {Object} [state]  The state object.
+   * @param {Object} [locales]  The locales object.
    * @private
    */
-  init(config, state) {
-    Game.STATUS = new Managers.StatusManager('init', 'warmup');
+  init(config, data, locales) {
+    Game.STATUS = new Managers.StatusManager('init', 'initializing');
+    Game.LOCALES = new Managers.LocalesManager(locales);
+    Game.CONFIG = new Managers.ConfigManager(config);
+    Game.DATA = new Managers.DataManager(data);
+    Game.SOUNDS = new Managers.SoundsManager(locales);
+    Game.TICKER = new Managers.TickerManager(Game.CONFIG.environment.ticker);
+    Game.TICKER.on('ticker', this.onTick.bind(this));
 
     return new Promise((resolve, reject) => {
-      Game.STATUS.phase = 'config';
+      Game.STATUS.phase = 'graphics engine';
+      return this.initCanvas();
+    }).then(() => {
+      return this.initStage();
+    }).then(() => {
+      Game.STATUS.phase = 'events';
+      //   this.gameElement = null;
+      //   this.onResize();
+      return this.bindEvents();
+    }).then(() => {
+      Game.STATUS.set('preload', 'starting');
+      return this.preload();
+    }).then(() => {
+      Game.STATUS.phase = 'preloaded';
+      //TODO: start game?
+      //   console.log('Game preloaded');
 
-      this.initConfig(config).then(() => {
-        Game.STATUS.phase = 'shared data';
-        return this.initShared();
-      }).then(() => {
-        Game.STATUS.phase = 'graphics engine';
-        return this.initCanvas();
-      }).then(() => {
-        return this.initStage();
-      }).then(() => {
-        Game.STATUS.phase = 'sounds engine';
-        return this.initSounds();
-      }).then(() => {
-        Game.STATUS.phase = 'ticker';
-        return this.initTicker();
-      }).then(() => {
-        Game.STATUS.phase = 'events';
-        //   this.gameElement = null;
-        //   this.onResize();
-        return this.bindEvents();
-      }).then(() => {
-        Game.STATUS.set('preload', 'starting');
-        return this.preload();
-      }).then(() => {
-        Game.STATUS.phase = 'preloaded';
-        //TODO: start game?
-        //   console.log('Game preloaded');
+      //   if (!Game.CONFIG.environment.editor) {
+      //     Game.dispatchEvent('startGame');
+      //     //Game.MODALS.open('instructions', {mode: 'instructions'});
+      //   } else {
+      //     Game.EDITOR.onStartGameClick();
+      //   }
 
-        //   if (!Game.CONFIG.environment.editor) {
-        //     Game.dispatchEvent('startGame');
-        //     //Game.MODALS.open('instructions', {mode: 'instructions'});
-        //   } else {
-        //     Game.EDITOR.onStartGameClick();
-        //   }
-
-        //   console.log('Game ready');
-        //   Game.STATUS = 'ready';
-      }).catch((error) => {
-        console.log('Game.init error', error);
-      });
+      //   console.log('Game ready');
+      //   Game.STATUS = 'ready';
+    }).catch((error) => {
+      console.log('Game.init error', error);
     });
   }
 
@@ -519,12 +436,6 @@ Game.CANVAS = null;
  * @type {Stage}
  */
 Game.STAGE = null;
-
-/**
- * WORLD Object represents the game world
- * @type {HTMLElement}
- */
-Game.WORLD = null;
 
 /**
  * IMAGES Object for preloaded images
