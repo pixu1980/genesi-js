@@ -1,4 +1,4 @@
-import {Draw, Anim, Preload, Sound, Elements, Components} from 'elements-js';
+import { Draw, Anim, Preload, Sound, Elements, Components } from 'evolve-js';
 import Game from './Game';
 
 const ƒ = window.ƒ;
@@ -86,7 +86,7 @@ export default class Preloader {
       padding: 10,
       stroke: {
         size: 4,
-        color:'#2b270d',
+        color: '#2b270d',
         radius: [45, 45, 45, 45],
       },
       align: 'center',
@@ -168,7 +168,7 @@ export default class Preloader {
    * @instance
    */
   handleProgress() {
-    if(this.lastProgress < this.loaderQueue.progress) {
+    if (this.lastProgress < this.loaderQueue.progress) {
       this.progressBar.setProgressPromise(this.loaderQueue.progress);
       this.lastProgress = this.loaderQueue.progress;
     }

@@ -23,7 +23,8 @@
     "spaced-comment": "off",
     "newline-per-chained-call": "off",
     "no-trailing-spaces": "off",
-    "no-mixed-operators": "off"
+    "no-mixed-operators": "off",
+    "mport/no-named-as-default-member": "off",
   },
   "globals": {
     "window": true,

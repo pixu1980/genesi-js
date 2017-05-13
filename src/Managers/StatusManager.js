@@ -22,6 +22,7 @@ export default class StatusManager extends Core.EventDispatcher {
     this._status = s;
     this.dispatchEvent({
       type: 'statusChange',
+      status: this.toJS(),
     });
   }
 
@@ -33,12 +34,18 @@ export default class StatusManager extends Core.EventDispatcher {
     this._phase = p;
     this.dispatchEvent({
       type: 'statusChange',
+      status: this.toJS(),
     });
   }
 
   update(status = 'unknown', phase = 'unknown') {
     this._status = status;
     this._phase = phase;
+
+    this.dispatchEvent({
+      type: 'statusChange',
+      status: this.toJS(),
+    });
   }
 
   init() {
@@ -50,9 +57,11 @@ export default class StatusManager extends Core.EventDispatcher {
   }
 
   onStatusChange(e) {
+    console.log('Status Changed ' + e.status);
     this.dispatchEvent({
       type: 'statusChanged',
-    }.inherit(true, this.toJS()));
+      status: e.status,
+    });
   }
 
   toJS() {

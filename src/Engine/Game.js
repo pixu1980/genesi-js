@@ -126,23 +126,6 @@ export default class Game extends Core.EventDispatcher {
 
 
   /**
-   * @todo
-   * @memberOf Game
-   * @method initTicker
-   * @instance
-   */
-  initTicker() {
-    return new Promise((resolve, reject) => {
-      try {
-
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
-
-  /**
    * Initiliazes the game core objects.
    * 
    * @method _initialize
@@ -151,12 +134,13 @@ export default class Game extends Core.EventDispatcher {
    * @private
    */
   init(config, data, locales) {
-    Game.STATUS = new Managers.StatusManager('init', 'initializing');
-    Game.LOCALES = new Managers.LocalesManager(locales);
-    Game.CONFIG = new Managers.ConfigManager(config);
-    Game.DATA = new Managers.DataManager(data);
-    Game.SOUNDS = new Managers.SoundsManager(locales);
-    Game.TICKER = new Managers.TickerManager(Game.CONFIG.environment.ticker);
+    Game.STATUS = new Managers.Status('init', 'initializing');
+    Game.LOCALES = new Managers.Locales(locales);
+    Game.CONFIG = new Managers.Config(config);
+    Game.DATA = new Managers.Data(data);
+    Game.SOUNDS = new Managers.Sounds();
+    // Game.SOUNDS = new Managers.Sounds(sounds);
+    Game.TICKER = new Managers.Ticker(Game.CONFIG.environment.ticker);
     Game.TICKER.on('ticker', this.onTick.bind(this));
 
     return new Promise((resolve, reject) => {

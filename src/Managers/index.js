@@ -6,11 +6,12 @@ import StatusManager from './StatusManager';
 import TickerManager from './TickerManager';
 
 const managers = {
-  Data,
-  Locales,
-  Sound,
-  Status,
-  Ticker,
+  Config: ConfigManager,
+  Data: DataManager,
+  Locales: LocalesManager,
+  Sound: SoundManager,
+  Status: StatusManager,
+  Ticker: TickerManager,
 };
 
 export default managers;
@@ -22,4 +23,4 @@ export {
   SoundManager,
   StatusManager,
   TickerManager,
-}
+};

@@ -1,39 +1,35 @@
 import Core from '../Core';
+import Game from '../Engine/Game';
 
 export default class DataManager extends Core.EventDispatcher {
   constructor(data = {}) {
     super();
 
-    this._data = data;
+    const scale = Math.min(window.innerWidth / Game.CONFIG.environment.canvas.width, window.innerHeight / Game.CONFIG.environment.canvas.height);
 
-        Game.SHARED.inherit({
-          scale: Math.min(window.innerWidth / Game.CONFIG.environment.canvas.width, window.innerHeight / Game.CONFIG.environment.canvas.height),
-          canvas: {
-            w: Game.CONFIG.environment.canvas.width,
-            h: Game.CONFIG.environment.canvas.height,
-          },
-        });
-
-        Game.SHARED.inherit({
-          canvas: {
-            scaledW: Game.SHARED.canvas.w * Game.SHARED.scale,
-            scaledH: Game.SHARED.canvas.h * Game.SHARED.scale,
-          },
-        });
+    this._data = {
+      scale,
+      canvas: {
+        width: Game.CONFIG.environment.canvas.width,
+        height: Game.CONFIG.environment.canvas.height,
+        scaledWidth: Game.CONFIG.environment.canvas.width * Game.SHARED.scale,
+        scaledHeight: Game.CONFIG.environment.canvas.height * Game.SHARED.scale,
+      },
+    }.inherit(data);
 
     this.init();
   }
 
   get(path) {
-    return this._data.path(path);
+    return this._data.path(path, null);
   }
 
   set(path, value, merge = false) {
-    pathFound = this.get(path);
-    
-    if(pathFound) {
-      if(merge) {
-      pathFound.inherit(value);
+    let pathFound = this.get(path);
+
+    if (pathFound) {
+      if (merge) {
+        pathFound.inherit(value);
       } else {
         pathFound = value;
       }
@@ -43,7 +39,18 @@ export default class DataManager extends Core.EventDispatcher {
       type: 'dataChange',
       data: this._data,
     });
+  }
 
+  get data() {
+    return this._data;
+  }
+
+  set data(l) {
+    this._data = l;
+    this.dispatchEvent({
+      type: 'dataChange',
+      data: this._data,
+    });
   }
 
   init() {

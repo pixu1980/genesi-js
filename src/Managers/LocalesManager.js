@@ -13,6 +13,27 @@ export default class LocalesManager extends Core.EventDispatcher {
     this.init();
   }
 
+  get(path) {
+    return this._locales.path(path, null);
+  }
+
+  set(path, value, merge = false) {
+    let pathFound = this.get(path);
+
+    if (pathFound) {
+      if (merge) {
+        pathFound.inherit(value);
+      } else {
+        pathFound = value;
+      }
+    }
+
+    this.dispatchEvent({
+      type: 'localesChange',
+      locales: this._locales,
+    });
+  }
+
   get locales() {
     return this._locales;
   }
@@ -21,11 +42,8 @@ export default class LocalesManager extends Core.EventDispatcher {
     this._locales = l;
     this.dispatchEvent({
       type: 'localesChange',
+      locales: this._locales,
     });
-  }
-
-  update(locales) {
-    this._locales.inherit(locales);
   }
 
   init() {
@@ -37,9 +55,11 @@ export default class LocalesManager extends Core.EventDispatcher {
   }
 
   onLocalesChange(e) {
+    console.log('Locales Changed ' + e.locales);
     this.dispatchEvent({
       type: 'localesChanged',
-    }.inherit(true, this.toJS()));
+      locales: e.locales,
+    });
   }
 
   toJS() {
