@@ -1,6 +1,6 @@
 # genesi-js
 
-## Note on GenesiJS v0.1.7
+## Note on GenesiJS v0.1.8
 For this and next releases, I'm trying to keep things more data-driven. So it can be easily extended by a visual editor or other 3th-party editors.
 
 ## Genesi JS
