@@ -133,11 +133,11 @@ export default class Game extends Core.EventDispatcher {
    * @param {Object} [locales]  The locales object.
    * @private
    */
-  init(config, data, locales) {
-    Game.STATUS = new Managers.Status('init', 'initializing');
-    Game.LOCALES = new Managers.Locales(locales);
+  init(config, locales) {
     Game.CONFIG = new Managers.Config(config);
-    Game.DATA = new Managers.Data(data);
+    Game.LOCALES = new Managers.Locales(locales);
+    Game.STATUS = new Managers.Status('init', 'initializing');
+    Game.DATA = new Managers.Data();
     Game.SOUNDS = new Managers.Sounds();
     // Game.SOUNDS = new Managers.Sounds(sounds);
     Game.TICKER = new Managers.Ticker(Game.CONFIG.environment.ticker);
