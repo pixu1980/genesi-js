@@ -1,6 +1,6 @@
 {
   "name": "genesi-js",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "GenesiJS (Game Engine Next Evolution Step Interfaces) a Game Engine and Dev Environment built over EvolveJS libraries.",
   "main": "dist/genesi.js",
   "scripts": {
