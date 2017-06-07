@@ -6,16 +6,6 @@ import Helpers from './Helpers';
 import Managers from './Managers';
 import Engine from './Engine';
 
-import release from '../release';
-
-const status = {
-  initialized: true,
-  version: release.version,
-  build: release.build,
-};
-
-console.log('GenesiJS initialized', status);
-
 const genesi = {
   Core,
   Draw,
@@ -28,7 +18,6 @@ const genesi = {
   Helpers,
   Managers,
   Engine,
-  status,
 };
 
 export default genesi;

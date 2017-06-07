@@ -6,14 +6,14 @@ export default class ConfigManager extends Core.EventDispatcher {
     super();
 
     this._config = {}.inherit(Constants.DEFAULT_CONFIG, config, {
-      environment: {
-        canvas: {
-          width: (!Number.isNumber(config.environment.canvas.width) ? Constants.DEFAULT_CONFIG.environment.canvas.width : config.environment.canvas.width),
-          height: (!Number.isNumber(config.environment.canvas.height) ? Constants.DEFAULT_CONFIG.environment.canvas.height : config.environment.canvas.height),
+      canvas: {
+        ar: {
+          width: (!Number.isNumber(config.canvas.width) ? Constants.DEFAULT_CONFIG.canvas.width : config.canvas.width),
+          height: (!Number.isNumber(config.canvas.height) ? Constants.DEFAULT_CONFIG.canvas.height : config.canvas.height),
         },
-        ticker: {
-          FPS: (!Number.isNumber(config.environment.ticker.FPS) ? Constants.DEFAULT_CONFIG.environment.ticker.FPS : config.environment.ticker.FPS),
-        },
+      },
+      ticker: {
+        FPS: (!Number.isNumber(config.ticker.FPS) ? Constants.DEFAULT_CONFIG.ticker.FPS : config.ticker.FPS),
       },
     });
 
@@ -62,7 +62,7 @@ export default class ConfigManager extends Core.EventDispatcher {
     this.on('configChange', this.onConfigChange.bind(this));
   }
 
-  onDataChange(e) {
+  onConfigChange(e) {
     console.log('Config Changed ' + e.config);
     this.dispatchEvent({
       type: 'configChanged',

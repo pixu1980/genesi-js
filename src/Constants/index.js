@@ -1,5 +1,4 @@
 import Core from '../Core';
-import release from '../../release';
 
 export default {
   // Anchor constants
@@ -36,23 +35,21 @@ export default {
   PI2: 6.2831853071,
 
   // Creatine constants
-  VERSION: release.version,
-  BUILD: release.build,
   DEFAULT_CONFIG: {
-    environment: {
-      debug: false,
-      ticker: {
-        FPS: 60,
-        showFPS: true,
-        timingMode: Core.Ticker.RAF,
-      },
-      canvas: {
-        selector: '.game-canvas',
-        ar: {
-          width: 1920,
-          height: 1080,
-        },
+    editor: false,
+    debug: false,
+    canvas: {
+      selector: '.game-canvas',
+      ar: {
+        width: 1920,
+        height: 1080,
       },
     },
+    ticker: {
+      FPS: 60,
+      showFPS: true,
+      timingMode: Core.Ticker.RAF,
+    },
+    locale: 'it',
   },
 };

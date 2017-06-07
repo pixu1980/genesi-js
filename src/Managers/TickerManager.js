@@ -22,33 +22,43 @@ export default class TickerManager extends Core.EventDispatcher {
     super();
 
     this.defaults = {
-      fps: 30,
-      mode: Core.Ticker.RAF,
+      FPS: 30,
+      showFPS: false,
+      timingMode: Core.Ticker.RAF,
     };
 
     this.settings = this.defaults.inherit(true, options);
 
-    this._fps = this.settings.fps;
-    this._mode = this.settings.mode;
+    this._FPS = this.settings.FPS;
+    this._showFPS = this.settings.showFPS;
+    this._timingMode = Core.Ticker[this.settings.timingMode];
     this._delta = 0;
 
     this.init();
   }
 
-  get fps() {
-    return this._fps;
+  get FPS() {
+    return this._FPS;
   }
 
-  set fps(value) {
-    this._fps = value;
+  set FPS(value) {
+    this._FPS = value;
   }
 
-  get mode() {
-    return this._mode;
+  get showFPS() {
+    return this._showFPS;
   }
 
-  set mode(value) {
-    this._mode = value;
+  set showFPS(value) {
+    this._showFPS = value;
+  }
+
+  get timingMode() {
+    return this._timingMode;
+  }
+
+  set timingMode(value) {
+    this._timingMode = value;
   }
 
   get delta() {
@@ -64,8 +74,8 @@ export default class TickerManager extends Core.EventDispatcher {
   }
 
   init() {
-    Core.Ticker.framerate = this._fps;
-    Core.Ticker.timingMode = this._mode;
+    Core.Ticker.framerate = this._FPS;
+    Core.Ticker.timingMode = this._timingMode;
 
     this.bindEvents();
   }
@@ -76,14 +86,19 @@ export default class TickerManager extends Core.EventDispatcher {
 
   onTick(e) {
     this._delta = e.delta;
-
-    this.dispatchEvent(e.inherit(true, {type: 'ticker'}, this.toJS()));
+    this.dispatchEvent({type: 'ticker'}.inherit(this.toJS()));
   }
 
   toJS() {
     return {
-      fps: this._fps,
-      mode: this._mode,
+      FPS: this._FPS,
+      showFPS: this._showFPS,
+      measuredFPS: Core.Ticker.getMeasuredFPS(),
+      timingMode: this._timingMode,
+      time: Core.Ticker.getTime(),
+      eventTime: Core.Ticker.getEventTime(),
+      measuredTickTime: Core.Ticker.getMeasuredTickTime(),
+      ticks: Core.Ticker.getTicks(),
       delta: this._delta,
       deltaSecs: this.deltaSecs,
     };

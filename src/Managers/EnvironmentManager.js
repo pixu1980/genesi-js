@@ -1,23 +1,19 @@
 import Core from '../Core';
-import Game from '../Engine/Game';
 
-export default class DataManager extends Core.EventDispatcher {
-  constructor(data = {}) {
+export default class EnvironmentManager extends Core.EventDispatcher {
+  constructor(data = {}, canvas = { width: 1280, height: 720 }) {
     super();
 
-    const scale = Math.min(window.innerWidth / Game.CONFIG.environment.canvas.width, window.innerHeight / Game.CONFIG.environment.canvas.height);
-
     this._data = {
-      scale,
-      canvas: {
-        width: Game.CONFIG.environment.canvas.width,
-        height: Game.CONFIG.environment.canvas.height,
-        scaledWidth: Game.CONFIG.environment.canvas.width * Game.SHARED.scale,
-        scaledHeight: Game.CONFIG.environment.canvas.height * Game.SHARED.scale,
-      },
+      canvas,
     }.inherit(data);
 
+    this.update();
     this.init();
+    // if (!!canvas) {
+    // } else {
+    //   throw new Core.Exception('Data', 'No game class instance found');
+    // }
   }
 
   get(path) {
@@ -45,8 +41,9 @@ export default class DataManager extends Core.EventDispatcher {
     return this._data;
   }
 
-  set data(l) {
-    this._data = l;
+  set data(value) {
+    this._data = value;
+
     this.dispatchEvent({
       type: 'dataChange',
       data: this._data,
@@ -66,6 +63,18 @@ export default class DataManager extends Core.EventDispatcher {
     this.dispatchEvent({
       type: 'dataChanged',
       data: e.data,
+    });
+  }
+
+  update() {
+    const scale = Math.min(window.innerWidth / this._data.canvas.width, window.innerHeight / this._data.canvas.height);
+
+    this._data.inherit({
+      scale,
+      canvas: {
+        scaledWidth: this._data.canvas.width * scale,
+        scaledHeight: this._data.canvas.height * scale,
+      },
     });
   }
 

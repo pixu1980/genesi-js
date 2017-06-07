@@ -1,7 +1,7 @@
 import { Sound } from 'evolve-js';
 import Core from '../Core';
 
-export default class SoundManager extends Core.EventDispatcher {
+export default class SoundsManager extends Core.EventDispatcher {
 
   constructor() {
     super();

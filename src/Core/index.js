@@ -1,4 +1,5 @@
 import { Core } from 'evolve-js';
+import Exception from './Exception';
 
 const core = {
   EventDispatcher: Core.EventDispatcher,
@@ -8,6 +9,7 @@ const core = {
   ProgressEvent: Core.ProgressEvent,
   BrowserDetect: Core.BrowserDetect,
   Ticker: Core.Ticker,
+  Exception,
   Touch: Core.Touch,
   UID: Core.UID,
 };

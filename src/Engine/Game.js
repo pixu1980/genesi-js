@@ -1,31 +1,16 @@
-import { Draw, Sound, Elements } from 'evolve-js';
+import { Anim, Draw, Preload, Sound, Elements } from 'evolve-js';
 
 import Core from '../Core';
 import Constants from '../Constants';
 import Managers from '../Managers';
 
-// import Preload from './Preload';
-// import GameElement from './Game/GameElement';
-// import Editor from './Game/Editor/Editor';
-// import ModalController from './Game/Modals/ModalController';
-
-const $ = window.$;
-
 /**
- * Game is the main class of creatine, it contains and initializes all 
- * systems for your games. It receives two parameters, a configuration 
- * object or an url for a JSON file, and an object containing state 
- * functions.
- *
- * Please consult {{#crossLinkModule 'creatine'}}this page
- * {{/crossLinkModule}} for an overview of these parameters and the usage
- * examples.
- *
+ * Main class representing game
  * @class Game
  * @public
- * @param {Object} [config] Configuration data or path for JSON.
- * @param {Object} [state]  State functions.
  */
+
+// export default class Game extends Engine.Game {
 export default class Game extends Core.EventDispatcher {
   /**
    * Init the world, create main loader promise.
@@ -34,7 +19,7 @@ export default class Game extends Core.EventDispatcher {
    * @instance
    * @return {Promise.<TResult>}
    */
-  constructor(config, locales) {
+  constructor(config, manifests = null, locales = null) {
     super();
 
     let _uniqueID = 0;
@@ -50,239 +35,143 @@ export default class Game extends Core.EventDispatcher {
       return ++_uniqueID;
     };
 
-    return this.init(config, locales);
+    this.init(config, manifests, locales);
   }
 
-  /**
-   * @todo
-   * @memberOf Game
-   * @method initCanvas
-   * @instance
-   */
   initCanvas() {
     return new Promise((resolve, reject) => {
-      try {
-        this.$canvas = $(Game.CONFIG.environment.canvas.selector);
-        this.canvas = this.$canvas[0];
-
-        if (!this.canvas) {
-          this.canvas = document.createElement('canvas');
-          this.canvas.width = Game.CONFIG.environment.ar.width;
-          this.canvas.height = Game.CONFIG.environment.ar.height;
-          this.canvas.setAttribute('tabindex', '0');
-          this.canvas.addEventListener('mousedown', this.canvas.focus, false);
-
-          //TODO: manage canvas target parent and append canvas to it
-        }
-
-        Game.CANVAS = this.canvas;
-
-        //TODO: manage renderers
-        //this.renderer = new window.Renderer2DMtx(this.stage, this.canvas);
-        //this.rendererSurface = this.renderer.getSurface(Game.CONFIG.environment.canvas.w, Game.CONFIG.environment.canvas.h);
-        //this.canvas.parentNode.replaceChild(this.rendererSurface, this.canvas);
-
-        resolve(Game.CANVAS);
-      } catch (error) {
-        reject(error);
-      }
+      this.CANVAS = window.document.querySelector(this.CONFIG.get('canvas.selector'));
+      Function.isFunction(resolve) && resolve();
     });
   }
 
-  /**
-   * @todo
-   * @memberOf Game
-   * @method initStage
-   * @instance
-   */
   initStage() {
     return new Promise((resolve, reject) => {
-      try {
-        this.stage = new Draw.Stage(this.canvas);
-        this.stage.updateViewport(Game.SHARED.canvas.w, Game.SHARED.canvas.h);
-        this.stage.snapToPixelEnabled = true;
-        this.stage.enableMouseOver();
-        Core.Touch.enable(this.stage);
+      this.STAGE = new Elements.StageElement(this.CANVAS, {
+        size: {
+          width: this.CONFIG.get('canvas.ar.width', 1920),
+          height: this.CONFIG.get('canvas.ar.height', 1080),
+        },
+      });
 
-        Game.STAGE = this.stageContainer = new Elements.Element({
-          parent: this.stage,
-          position: {
-            x: Game.SHARED.canvas.w * 0.5,
-            y: Game.SHARED.canvas.h * 0.5,
-          },
-          size: {
-            width: Game.SHARED.canvas.w,
-            height: Game.SHARED.canvas.h,
-          },
-          fill: 'transparent',
-        });
-
-        resolve(Game.STAGE);
-      } catch (error) {
-        reject(error);
-      }
+      Function.isFunction(resolve) && resolve();
     });
   }
 
+  initTicker() {
+    return new Promise((resolve, reject) => {
+      this.TICKER = new Managers.Ticker(this.CONFIG.get('ticker'));
+      this.TICKER.on('ticker', this.onTicker.bind(this));
+
+      Function.isFunction(resolve) && resolve();
+    });
+  }
+
+  addChild(name = '', Class = null, options = {}) {
+    if (!!name && !!Class) {
+      this[name] = new Class(options.inherit({ parent: this.STAGE }));
+      return this[name];
+    }
+
+    return null;
+  }
+
+  removeChild(child) {
+    if (String.isString(child)) {
+      this.STAGE.removeChild(this[child]);
+      this[child] = null;
+    } else if (child instanceof Elements.Element) {
+      this.STAGE.removeChild(child);
+      child = null;
+    }
+  }
+
+  preload(manifests) {
+    return new Promise((resolve, reject) => {
+      this.addChild('preloaderElement', Preload.PreloaderElement, {
+        size: '100%',
+        align: 'center middle',
+        manifests,
+      }).on('preloader.preloaded', (e) => {
+        Game.ASSETS = new Managers.Assets(e.assets);
+        //     Game.SOUNDS = new Managers.Sounds(Game.ASSETS.sounds);
+        //     Game.DISPLAY = new Managers.Display();
+        //     Game.CONTROLS = new Managers.Controls();
+
+        // createjs.Touch.enable(this.stage);
+        // createjs.Sound.initializeDefaultPlugins();
+
+        // // Managers
+        // this.device = new creatine.DeviceManager(this);
+        // this.create = new creatine.FactoryManager(this);
+        // this.director = new creatine.SceneManager(this);
+        // this.storage = new creatine.StorageManager(this);
+        // this.sound = new creatine.SoundManager(this);
+        // this.keyboard = new creatine.KeyboardManager(this);
+        // this.mouse = new creatine.MouseManager(this);
+        // this.gamepad = new creatine.GamepadManager(this);
+        // this.touch = new creatine.TouchManager(this);
+        // this.plugins = new creatine.PluginManager(this);
+        Anim.Tween.get(this.preloaderElement).to({
+          alpha: 0,
+        }, 350, Anim.Ease.linear).call(() => {
+          this.removeChild('preloaderElement');
+
+          if (this.CONFIG.get('ticker.showFPS')) {
+            this.addChild('showFPSText', Elements.TextElement, {
+              text: 'FPS',
+              font: '25px Verdana',
+              align: 'top right',
+              textAlign: 'right',
+            });
+          }
+
+          Function.isFunction(resolve) && resolve(e.assets);
+        });
+      });
+    });
+  }
 
   /**
-   * Initiliazes the game core objects.
-   * 
-   * @method _initialize
-   * @param {Object} [config] The configuration objects.
-   * @param {Object} [locales]  The locales object.
-   * @private
+   * Initialized entire game world & global objects
+   * @memberOf Game
+   * @method init
+   * @param resolve
+   * @instance
    */
-  init(config, locales) {
-    Game.CONFIG = new Managers.Config(config);
-    Game.LOCALES = new Managers.Locales(locales);
-    Game.STATUS = new Managers.Status('init', 'initializing');
-    Game.DATA = new Managers.Data();
-    Game.SOUNDS = new Managers.Sounds();
-    // Game.SOUNDS = new Managers.Sounds(sounds);
-    Game.TICKER = new Managers.Ticker(Game.CONFIG.environment.ticker);
-    Game.TICKER.on('ticker', this.onTick.bind(this));
+  init(config, manifests = null, locales = null) {
+    this.CONFIG = new Managers.Config(config);
+    this.LOCALES = new Managers.Locales(locales);
+    this.STATUS = new Managers.Status('init', 'initializing');
+    this.ENVIRONMENT = new Managers.Environment({}, this.CONFIG.get('canvas.ar'));
 
-    return new Promise((resolve, reject) => {
-      Game.STATUS.phase = 'graphics engine';
-      return this.initCanvas();
-    }).then(() => {
+    this.initCanvas().then(() => {
       return this.initStage();
     }).then(() => {
-      Game.STATUS.phase = 'events';
-      //   this.gameElement = null;
-      //   this.onResize();
-      return this.bindEvents();
+      return this.initTicker();
     }).then(() => {
-      Game.STATUS.set('preload', 'starting');
-      return this.preload();
-    }).then(() => {
-      Game.STATUS.phase = 'preloaded';
-      //TODO: start game?
-      //   console.log('Game preloaded');
+      this.bindEvents();
 
-      //   if (!Game.CONFIG.environment.editor) {
-      //     Game.dispatchEvent('startGame');
-      //     //Game.MODALS.open('instructions', {mode: 'instructions'});
-      //   } else {
-      //     Game.EDITOR.onStartGameClick();
-      //   }
-
-      //   console.log('Game ready');
-      //   Game.STATUS = 'ready';
-    }).catch((error) => {
-      console.log('Game.init error', error);
+      return this.preload(manifests);
+    }).then((assets) => {
+      this.postInit(assets);
     });
   }
-
-  /**
-   * The update state of the game, called periodically once the engine finishes
-   * the create state. It calls the state function if provided by the user.
-   * 
-   * @method update
-   * @private
-   */
-  update() {
-    return new Promise((resolve, reject) => {
-      Game.STATUS.update('update', 'starting');
-
-      // pre update
-      this.mouse.preUpdate();
-      this.gamepad.preUpdate();
-      this.plugins.preUpdate();
-      Game.STATUS.phase = 'pre-update';
-
-      // update
-      this.director.update();
-      this.plugins.update();
-      Game.STATUS.phase = 'update';
-
-      // post update
-      this.keyboard.postUpdate();
-      this.mouse.postUpdate();
-      this.gamepad.postUpdate();
-      this.plugins.postUpdate();
-      Game.STATUS.phase = 'post-update';
-
-      Game.STATUS.phase = 'updated';
-    });
-  }
-
-  /**
-   * The draw state of the game, called periodically once the engine finishes
-   * the create state. It calls the state function if provided by the user.
-   * 
-   * @method draw
-   * @private
-   */
-  draw() {
-    Game.STATUS.update('draw', 'starting');
-
-    // pre draw
-    this.plugins.preDraw();
-    Game.STATUS.phase = 'pre-draw';
-
-    // draw
-    this.plugins.draw();
-    Game.STATUS.phase = 'draw';
-
-    this.stage.update();
-
-    // post draw
-    this.plugins.postDraw();
-    Game.STATUS.phase = 'post-draw';
-
-    Game.STATUS.phase = 'drawed';
-  }
-
-  checkStatus(options) {
-    if (Game.WORLD.isEnded()) {
-      Game.dispatchEvent({
-        type: 'endGame',
-        prize: Game.CONTROLS.getPrize(),
-      });
-    }
-  }
-
-  updateStatus(options) {
-    Game.CONTROLS.status = 'animated';
-    Game.WORLD.updateStatus(options);
-  }
-
-  /**
-   * The preload state of the game, called right after the booting and right 
-   * before the preloading process. It calls the state function if provided by 
-   * the user.
-   * 
-   * @method _preload
-   * @private
-   */
-  preload() {
-    if (this.state.preload) this.state.preload(this);
-
-    // If all items loaded/no item to load and no manifest
-    if (this.load.isFinished() && !this.config.resources.manifest) {
-      this._create();
-
-      // Loading item or have manifest
-    } else {
-      this.load.on('complete', this._create, this);
-      if (this.config.resources.manifest) {
-        this.load.manifest(this.config.resources.manifest);
-      }
-      this.load.load();
-    }
-  }
-
 
   /**
    * Ticker function - updating stage with each tick.
    * @memberOf Game
-   * @method ticker
+   * @method onTicker
    * @instance
    */
-  onTick() {
-    this.stage.update();
+  onTicker(e) {
+    if (this.CONFIG.get('ticker.showFPS')) {
+      if (this.showFPSText) {
+        this.showFPSText.setText(e.measuredFPS.toFixed(3) + ' FPS');
+      }
+    }
+
+    this.STAGE.update();
   }
 
   /**
@@ -292,161 +181,35 @@ export default class Game extends Core.EventDispatcher {
    * @instance
    */
   onResize() {
-    if (!this.canvas) {
+    if (!this.CANVAS) {
       return;
     }
 
-    Game.SHARED.inherit({
-      scale: Math.min(window.innerWidth / Game.CONFIG.environment.canvas.width, window.innerHeight / Game.CONFIG.environment.canvas.height),
-      canvas: {
-        w: Game.CONFIG.environment.canvas.width,
-        h: Game.CONFIG.environment.canvas.height,
-      },
-      cell: {
-        w: (Game.CONFIG.environment.canvas.width * 0.95) / Game.CONFIG.game.grid.cols,
-        h: (Game.CONFIG.environment.canvas.width * 0.95) / Game.CONFIG.game.grid.cols, // ar square 1:1
-      },
-    });
+    this.ENVIRONMENT.update();
 
-    Game.SHARED.inherit({
-      canvas: {
-        scaledW: Game.SHARED.canvas.w * Game.SHARED.scale,
-        scaledH: Game.SHARED.canvas.h * Game.SHARED.scale,
-      },
-    });
+    Elements.Helpers.setBoxSize(this.CANVAS, this.ENVIRONMENT.get('canvas.scaledWidth'), this.ENVIRONMENT.get('canvas.scaledHeight'), true);
 
-    Elements.Helpers.setBoxSize(this.canvas, Game.SHARED.canvas.scaledW, Game.SHARED.canvas.scaledH, true);
-
-    if (!this.stage) {
+    if (!this.STAGE) {
       return;
     }
 
-    Elements.Helpers.scale(this.stage, Game.SHARED.scale);
+    Elements.Helpers.scale(this.STAGE, this.ENVIRONMENT.get('scale'));
 
-    this.stage.update();
+    this.STAGE.update();
   }
 
   /**
-   * startGame event handler
-   * @memberOf Game
-   * @method onStartGame
-   * @instance
-   */
-  onStartGame(options) {
-    Game.STATUS = 'started';
-
-    if (!!this.gameElement) {
-      Game.STAGE.removeChild(this.gameElement);
-      this.gameElement = null;
-    }
-
-    Game.CONFIG.inherit({
-      game: {
-        grid: {
-          rows: options.rows,
-          cols: options.cols,
-        },
-        prizes: Game.CONFIG.game.prizes.inherit(options.prizes),
-      },
-    });
-
-    Game.SHARED.inherit({
-      cell: {
-        w: (Game.CONFIG.environment.canvas.width * 0.95) / Game.CONFIG.game.grid.cols,
-        h: (Game.CONFIG.environment.canvas.width * 0.95) / Game.CONFIG.game.grid.cols, // ar square 1:1
-      },
-    });
-
-
-    //return new Promise((resolve) => {
-    //  this.INTERACTIVE_AREA.animate();
-    //  this.GRID.animateGrid(resolve);
-    //});
-  }
-
-  /**
-   * endGame event handler
-   * @memberOf Game
-   * @method onEndGame
-   * @param options
-   * @instance
-   */
-  onEndGame(options) {
-    Game.STATUS = 'ended';
-    let mode = 'lose';
-
-    if (options.prize > 0) {
-      mode = (options.prize >= 500 ? 'big-win' : 'small-win');
-    } else if (options.prize === 'R') {
-      mode = 'replay';
-    }
-
-    Game.MODALS.open('gameEnd', {
-      mode,
-      prize: options.prize,
-    });
-  }
-
-  /**
-   * Game world events binder
-   * @memberOf Game
-   * @method bindEvents
-   * @instance
-   */
+ * Game world events binder
+ * @memberOf Game
+ * @method bindEvents
+ * @instance
+ */
   bindEvents() {
     window.onresize = this.onResize.proxy(this);
+    this.onResize();
+  }
 
-    Core.EventDispatcher.initialize(this);
-
-    this.addEventListener('startGame', this.onStartGame.proxy(this));
-    this.addEventListener('endGame', this.onEndGame.proxy(this));
-
-    this.addEventListener('checkStatus', this.checkStatus.proxy(this));
-    this.addEventListener('updateStatus', this.updateStatus.proxy(this));
-    this.addEventListener('updatePrize', this.updatePrize.proxy(this));
-
-    Game.inherit(this);
+  postInit(assets) {
+    console.log('post init');
   }
 }
-
-/**
- * CANVAS Object represents canvas
- * @type {HTMLElement}
- */
-Game.CANVAS = null;
-
-/**
- * STAGE Object represents stage container
- * @type {Stage}
- */
-Game.STAGE = null;
-
-/**
- * IMAGES Object for preloaded images
- * @type {Hash}
- */
-Game.IMAGES = {};
-
-/**
- * SPRITESHEETS Object for preloaded spritesheets
- * @type {Hash}
- */
-Game.SPRITESHEETS = {};
-
-/**
- * SHARED Object represents shared data
- * @type {Hash}
- */
-Game.SHARED = {}; //
-
-/**
- * STATUS String represents actual game status
- * @type {String}
- */
-Game.STATUS = null;
-
-/**
- * CONFIG Object represents game config
- * @type {Object}
- */
-Game.CONFIG = null;

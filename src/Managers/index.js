@@ -1,15 +1,17 @@
 import ConfigManager from './ConfigManager';
-import DataManager from './DataManager';
+import EnvironmentManager from './EnvironmentManager';
+import AssetsManager from './AssetsManager';
 import LocalesManager from './LocalesManager';
-import SoundManager from './SoundManager';
+import SoundsManager from './SoundsManager';
 import StatusManager from './StatusManager';
 import TickerManager from './TickerManager';
 
 const managers = {
   Config: ConfigManager,
-  Data: DataManager,
+  Environment: EnvironmentManager,
+  Assets: AssetsManager,
   Locales: LocalesManager,
-  Sound: SoundManager,
+  Sounds: SoundsManager,
   Status: StatusManager,
   Ticker: TickerManager,
 };
@@ -18,9 +20,10 @@ export default managers;
 
 export {
   ConfigManager,
-  DataManager,
+  EnvironmentManager,
+  AssetsManager,
   LocalesManager,
-  SoundManager,
+  SoundsManager,
   StatusManager,
   TickerManager,
 };

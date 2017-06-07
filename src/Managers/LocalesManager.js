@@ -1,7 +1,7 @@
 import Core from '../Core';
 
 /**
- * @class StatusManager
+ * @class LocalesManager
  * @constructor
  */
 export default class LocalesManager extends Core.EventDispatcher {
