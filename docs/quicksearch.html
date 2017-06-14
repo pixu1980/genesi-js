@@ -1,31 +1,26 @@
 <html>
-<head>
-</head>
+<head> </head>
 <body style="background: transparent;">
-    <script src="scripts/docstrap.lib.js"></script>
-    <script src="scripts/lunr.min.js"></script>
-    <script src="scripts/fulltext-search.js"></script>
+  <script src="scripts/docstrap.lib.js"></script>
+  <script src="scripts/lunr.min.js"></script>
+  <script src="scripts/fulltext-search.js"></script>
+  <script type="text/x-docstrap-searchdb"> {"classes.list.html":{"id":"classes.list.html","title":"Classes","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Classes Classes Game exports exports exports exports exports getNewID × Search results Close "},"index.html":{"id":"index.html","title":"Index","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID × Search results Close "},"Game.html":{"id":"Game.html","title":"Class: Game","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Class: Game Game new Game() Main class representing game Methods bindEvents() Game world events binder constructor() Init the world, create main loader promise. Returns: Type Promise.&lt;TResult&gt; init(resolve) Initialized entire game world &amp; global objects Parameters: Name Type Description resolve onResize() onResize handler updates canvas and stage depending on window dimensions. onTicker() Ticker function - updating stage with each tick. × Search results Close "},"module.exports.html":{"id":"module.exports.html","title":"Class: exports","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Class: exports exports TickerManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports AssetsManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports LocalesManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports SoundManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports StatusManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object × Search results Close "},"module.exports_getNewID.html":{"id":"module.exports_getNewID.html","title":"Class: getNewID","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Class: getNewID .exports# getNewID newId new getNewID() Generates a new sequential identifier, starting from `1`. Returns: A sequential integer. × Search results Close "}} </script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      Searcher.init();
+    });
 
-    <script type="text/x-docstrap-searchdb">
-    {"classes.list.html":{"id":"classes.list.html","title":"Classes","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Classes Classes Game exports exports exports exports exports getNewID × Search results Close "},"index.html":{"id":"index.html","title":"Index","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID × Search results Close "},"Game.html":{"id":"Game.html","title":"Class: Game","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Class: Game Game new Game() Main class representing game Methods bindEvents() Game world events binder constructor() Init the world, create main loader promise. Returns: Type Promise.&lt;TResult&gt; init(resolve) Initialized entire game world &amp; global objects Parameters: Name Type Description resolve onResize() onResize handler updates canvas and stage depending on window dimensions. onTicker() Ticker function - updating stage with each tick. × Search results Close "},"module.exports.html":{"id":"module.exports.html","title":"Class: exports","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Class: exports exports TickerManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports AssetsManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports LocalesManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports SoundManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object Class: exports exports StatusManager new exports() Classes getNewID Members &lt;private&gt; _groups The sound groups. Properties: Name Type Description groups Object × Search results Close "},"module.exports_getNewID.html":{"id":"module.exports_getNewID.html","title":"Class: getNewID","body":" GenesiJS Classes Gamemodule.exportsmodule.exports#getNewID Class: getNewID .exports# getNewID newId new getNewID() Generates a new sequential identifier, starting from `1`. Returns: A sequential integer. × Search results Close "}}
-    </script>
+    $(window).on("message", function (msg) {
+      var msgData = msg.originalEvent.data;
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            Searcher.init();
-        });
+      if (msgData.msgid != "docstrap.quicksearch.start") {
+        return;
+      }
 
-        $(window).on("message", function(msg) {
-            var msgData = msg.originalEvent.data;
+      var results = Searcher.search(msgData.searchTerms);
 
-            if (msgData.msgid != "docstrap.quicksearch.start") {
-                return;
-            }
-
-            var results = Searcher.search(msgData.searchTerms);
-
-            window.parent.postMessage({"results": results, "msgid": "docstrap.quicksearch.done"}, "*");
-        });
-    </script>
+      window.parent.postMessage({ "results": results, "msgid": "docstrap.quicksearch.done" }, "*");
+    });
+  </script>
 </body>
 </html>

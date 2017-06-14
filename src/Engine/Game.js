@@ -38,19 +38,16 @@ export default class Game extends Core.EventDispatcher {
     this.init(config, manifests, locales);
   }
 
-  initCanvas() {
-    return new Promise((resolve, reject) => {
-      this.CANVAS = window.document.querySelector(this.CONFIG.get('canvas.selector'));
-      Function.isFunction(resolve) && resolve();
-    });
-  }
+  initDisplay() {
+    this.DISPLAY = new Managers.Display(this.CONFIG.get('canvas'));
 
-  initStage() {
     return new Promise((resolve, reject) => {
+      this.CANVAS = document.querySelector(this.CONFIG.get('canvas.selector'));
+
       this.STAGE = new Elements.StageElement(this.CANVAS, {
         size: {
-          width: this.CONFIG.get('canvas.ar.width', 1920),
-          height: this.CONFIG.get('canvas.ar.height', 1080),
+          width: this.DISPLAY.get('canvas.width', 1280),
+          height: this.DISPLAY.get('canvas.height', 720),
         },
       });
 
@@ -93,7 +90,7 @@ export default class Game extends Core.EventDispatcher {
         align: 'center middle',
         manifests,
       }).on('preloader.preloaded', (e) => {
-        Game.ASSETS = new Managers.Assets(e.assets);
+        this.ASSETS = new Managers.Assets(e.assets);
         //     Game.SOUNDS = new Managers.Sounds(Game.ASSETS.sounds);
         //     Game.DISPLAY = new Managers.Display();
         //     Game.CONTROLS = new Managers.Controls();
@@ -140,16 +137,16 @@ export default class Game extends Core.EventDispatcher {
    * @instance
    */
   init(config, manifests = null, locales = null) {
+    this.STATUS = new Managers.Status('init', 'initializing');
+    this.ENVIRONMENT = new Managers.Environment();
     this.CONFIG = new Managers.Config(config);
     this.LOCALES = new Managers.Locales(locales);
-    this.STATUS = new Managers.Status('init', 'initializing');
-    this.ENVIRONMENT = new Managers.Environment({}, this.CONFIG.get('canvas.ar'));
 
-    this.initCanvas().then(() => {
-      return this.initStage();
-    }).then(() => {
+    this.initDisplay().then(() => {
       return this.initTicker();
     }).then(() => {
+      this.onResize();
+
       this.bindEvents();
 
       return this.preload(manifests);
@@ -185,15 +182,13 @@ export default class Game extends Core.EventDispatcher {
       return;
     }
 
-    this.ENVIRONMENT.update();
-
-    Elements.Helpers.setBoxSize(this.CANVAS, this.ENVIRONMENT.get('canvas.scaledWidth'), this.ENVIRONMENT.get('canvas.scaledHeight'), true);
+    this.DISPLAY.update();
 
     if (!this.STAGE) {
       return;
     }
 
-    Elements.Helpers.scale(this.STAGE, this.ENVIRONMENT.get('scale'));
+    Elements.Helpers.scale(this.STAGE, this.DISPLAY.get('scale'));
 
     this.STAGE.update();
   }
@@ -205,8 +200,7 @@ export default class Game extends Core.EventDispatcher {
  * @instance
  */
   bindEvents() {
-    window.onresize = this.onResize.proxy(this);
-    this.onResize();
+    this.DISPLAY.on('resized', this.onResize.proxy(this));
   }
 
   postInit(assets) {
