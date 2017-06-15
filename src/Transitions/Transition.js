@@ -2,21 +2,6 @@ import { Anim, Draw, Preload, Sound, Elements } from 'evolve-js';
 
 import Core from '../Core';
 
-/**
- * @class Transition
- * @constructor
- */
-export default class Transition extends Core.EventDispatcher {
-  constructor(options = { ease: Anim.Ease.linear, time: 400 }) {
-
-
-    this.ease
-  }
-}
-
-(function () {
-  "use strict";
-
   /**
    * A transition effect to fade-in the new scene.
    *
@@ -29,28 +14,29 @@ export default class Transition extends Core.EventDispatcher {
    *       }
    *     });
    *
-   * @class FadeIn
+   * @class Transition
    * @constructor
    * @param {Function} [ease=createjs.Ease.linear] An easing function from 
    *                   `createjs.Ease` (provided by TweenJS).
    * @param {Number} [time=400] The transition time in milliseconds.
   **/
-  var FadeIn = function (ease, time) {
-    /**
-     * An Easing function from createjs.Ease.
-     * @property ease
-     * @type {Function}
-    **/
-    this.ease = ease || createjs.Ease.linear;
+export default class Transition extends Core.EventDispatcher {
+  constructor(options = { ease: Anim.Ease.linear, duration: 400 }) {
+    this._defaults = {
+      in: null,
+      out: null,
+      ease: Anim.Ease.linear,
+      duration: 400,
+    };
 
-    /**
-     * The transition time in milliseconds.
-     * @property time
-     * @type {Number}
-    **/
-    this.time = time || 400;
+    this._settings = this._defaults.inherit(true, options);
+
+    this.init();
   }
-  var p = FadeIn.prototype;
+
+  init() {
+    this.isValid = this._settings.in instanceof Elements.Element && this._settings.out instanceof Elements.Element && this._settings.in.parent === this._settings.out.parent
+  }
 
   /**
    * Initialize the transition (called by the director).
@@ -62,7 +48,7 @@ export default class Transition extends Core.EventDispatcher {
    *                   transition is done.
    * @protected
   **/
-  p.start = function (director, outScene, inScene, callback) {
+  start(director, outScene, inScene, callback) {
     this.director = director;
     this.outScene = outScene;
     this.inScene = inScene;
@@ -82,13 +68,10 @@ export default class Transition extends Core.EventDispatcher {
    * @method complete
    * @protected
   **/
-  p.complete = function () {
+  end() {
     createjs.Tween.removeTweens(this.inScene);
     this.director._makeTop(this.inScene, this.outScene)
     this.inScene.alpha = 1;
     this.callback();
   }
-
-
-  creatine.transitions.FadeIn = FadeIn;
-}());
+}
