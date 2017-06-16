@@ -16,13 +16,13 @@ import Transition from '../Transition';
  *       }
  *     });
  *
- * @class MoveIn
+ * @class MoveOut
  * @constructor
  * @param {Function} [ease=createjs.Ease.linear] An easing function from 
  *                   `createjs.Ease` (provided by TweenJS).
  * @param {Number} [duration=400] The transition time in milliseconds.
 **/
-export default class MoveIn extends Transition {
+export default class MoveOut extends Transition {
   constructor(options = { ease: Anim.Ease.linear, duration: 400, direction: 'top left' }) {
     super(options);
   }
@@ -35,31 +35,38 @@ export default class MoveIn extends Transition {
     }
   }
 
+  startTransitionSwap() {
+    // sample fadein transition, OVERRIDE HERE
+    if (!(this.idxOut === -1 || this.idxIn === -1 || this.idxOut >= this.idxIn)) {
+      this.parent.removeChild(this.out);
+      this.parent.addChildAt(this.out, this.idxIn);
+    }
+  }
 
   startTransition() {
     return new Promise((resolve, reject) => {
-      this.endPosition = this.startPosition = {
-        x: this.in.x,
-        y: this.in.y,
+      this.endOutOptions = this.startOutOptions = {
+        x: this.out.x,
+        y: this.out.y,
       };
 
       if(Constants.HORIZONTAL_MODES.contains(this.directions)) {
         if(this.directions.contains(Constants.LEFT)) {
-          this.startPosition.x = -this.parentBounds.width;
+          this.endOutOptions.x = -this.parentBounds.width;
         } else if(this.directions.contains(Constants.RIGHT)) {
-          this.startPosition.x = this.parentBounds.width;
+          this.endOutOptions.x = this.parentBounds.width;
         }
       }
 
       if(Constants.VERTICAL_MODES.contains(this.directions)) {
         if(this.directions.contains(Constants.TOP)) {
-          this.startPosition.y = -this.parentBounds.height;
+          this.endOutOptions.y = -this.parentBounds.height;
         } else if(this.directions.contains(Constants.BOTTOM)) {
-          this.startPosition.y = this.parentBounds.height;
+          this.endOutOptions.y = this.parentBounds.height;
         }
       }
 
-      this.in.inherit(this.startPosition).animate({ override: true }, this.endPosition, this.duration, this.ease).then(() => {
+      this.out.inherit(this.startOutOptions).animate({ override: true }, this.endOutOptions, this.duration, this.ease).then(() => {
         resolve();
       });
     });
@@ -67,7 +74,7 @@ export default class MoveIn extends Transition {
 
   endTransition() {
     return new Promise((resolve, reject) => {
-      this.in.inherit(this.endPosition);
+      this.out.inherit(this.startOutOptions);
 
       resolve();
     });

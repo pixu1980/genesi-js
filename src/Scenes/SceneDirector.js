@@ -6,7 +6,7 @@ import Core from '../Core';
  * @class Scene
  * @constructor
  */
-export default class SceneDirector extends Elements.Element {
+export default class SceneDirector extends Core.EventDispatcher {
   constructor(options = {}) {
     super();
   }

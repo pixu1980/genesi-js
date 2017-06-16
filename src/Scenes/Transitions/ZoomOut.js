@@ -15,18 +15,34 @@ import Transition from '../Transition';
  *       }
  *     });
  *
- * @class FadeIn
+ * @class ZoomOut
  * @constructor
  * @param {Function} [ease=createjs.Ease.linear] An easing function from 
  *                   `createjs.Ease` (provided by TweenJS).
  * @param {Number} [duration=400] The transition time in milliseconds.
 **/
-export default class FadeIn extends Transition {
+export default class ZoomOut extends Transition {
+  startTransitionSwap() {
+    // sample fadein transition, OVERRIDE HERE
+    if (!(this.idxOut === -1 || this.idxIn === -1 || this.idxOut >= this.idxIn)) {
+      this.parent.removeChild(this.out);
+      this.parent.addChildAt(this.out, this.idxIn);
+    }
+  }
+
   startTransition() {
     return new Promise((resolve, reject) => {
-      this.in.inherit({
-        alpha: 0,
-      }).animate({ override: true }, { alpha: 1 }, this.duration, this.ease).then(() => {
+      this.startOutOptions = {
+        scaleX: this.out.scaleX,
+        scaleY: this.out.scaleY,
+      }
+
+      this.endOutOptions = {
+        scaleX: 0,
+        scaleY: 0,
+      }
+
+      this.out.inherit(this.startOutOptions).animate({ override: true }, this.endOutOptions, this.duration, this.ease).then(() => {
         resolve();
       });
     });
@@ -34,9 +50,7 @@ export default class FadeIn extends Transition {
 
   endTransition() {
     return new Promise((resolve, reject) => {
-      this.in.inherit({
-        alpha: 1,
-      });
+      this.out.inherit(this.startOutOptions);
 
       resolve();
     });

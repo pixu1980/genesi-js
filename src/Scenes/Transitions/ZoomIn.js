@@ -25,17 +25,17 @@ import Transition from '../Transition';
 export default class ZoomIn extends Transition {
   startTransition() {
     return new Promise((resolve, reject) => {
-      this.startScale = {
+      this.startInOptions = {
         scaleX: 0,
         scaleY: 0,
       }
 
-      this.endScale = {
+      this.endInOptions = {
         scaleX: 1,
         scaleY: 1,
       }
 
-      this.in.inherit(this.startScale).animate({ override: true }, this.endScale, this.duration, this.ease).then(() => {
+      this.in.inherit(this.startInOptions).animate({ override: true }, this.endInOptions, this.duration, this.ease).then(() => {
         resolve();
       });
     });
@@ -43,7 +43,7 @@ export default class ZoomIn extends Transition {
 
   endTransition() {
     return new Promise((resolve, reject) => {
-      this.in.inherit(this.endScale);
+      this.in.inherit(this.endInOptions);
 
       resolve();
     });

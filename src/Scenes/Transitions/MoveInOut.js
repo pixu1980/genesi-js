@@ -45,42 +45,42 @@ export default class MoveInOut extends Transition {
 
   startTransition() {
     return new Promise((resolve, reject) => {
-      this.endInPosition = this.startInPosition = {
+      this.endInOptions = this.startInOptions = {
         x: this.in.x,
         y: this.in.y,
       };
 
-      this.endOutPosition = this.startOutPosition = {
+      this.endOutOptions = this.startOutOptions = {
         x: this.out.x,
         y: this.out.y,
       };
 
       if (this.direction === Constants.TOP) {
-        this.startInPosition.y = -this.parentBounds.height;
-        this.endOutPosition.y = this.parentBounds.height;
+        this.startInOptions.y = -this.parentBounds.height;
+        this.endOutOptions.y = this.parentBounds.height;
       } else if (this.direction === Constants.RIGHT) {
-        this.startInPosition.x = this.parentBounds.width;
-        this.endOutPosition.x = -this.parentBounds.width;
+        this.startInOptions.x = this.parentBounds.width;
+        this.endOutOptions.x = -this.parentBounds.width;
       } else if (this.direction === Constants.BOTTOM) {
-        this.startInPosition.y = this.parentBounds.height;
-        this.endOutPosition.y = -this.parentBounds.height;
+        this.startInOptions.y = this.parentBounds.height;
+        this.endOutOptions.y = -this.parentBounds.height;
       } else if (this.direction === Constants.LEFT) {
-        this.startInPosition.x = -this.parentBounds.width;
-        this.endOutPosition.x = this.parentBounds.width;
+        this.startInOptions.x = -this.parentBounds.width;
+        this.endOutOptions.x = this.parentBounds.width;
       }
 
-      this.in.inherit(this.startInPosition).animate({ override: true }, this.endInPosition, this.duration, this.ease).then(() => {
+      this.in.inherit(this.startInOptions).animate({ override: true }, this.endInOptions, this.duration, this.ease).then(() => {
         resolve();
       });
 
-      this.out.inherit(this.startOutPosition).animate({ override: true }, this.endOutPosition, this.duration, this.ease);
+      this.out.inherit(this.startOutOptions).animate({ override: true }, this.endOutOptions, this.duration, this.ease);
     });
   }
 
   endTransition() {
     return new Promise((resolve, reject) => {
-      this.in.inherit(this.endInPosition);
-      this.out.inherit(this.endOutPosition);
+      this.in.inherit(this.endInOptions);
+      this.out.inherit(this.endOutOptions);
 
       resolve();
     });

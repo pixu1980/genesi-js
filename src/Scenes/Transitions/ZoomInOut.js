@@ -15,13 +15,13 @@ import Transition from '../Transition';
  *       }
  *     });
  *
- * @class ZoomOut
+ * @class ZoomInOut
  * @constructor
  * @param {Function} [ease=createjs.Ease.linear] An easing function from 
  *                   `createjs.Ease` (provided by TweenJS).
  * @param {Number} [duration=400] The transition time in milliseconds.
 **/
-export default class ZoomOut extends Transition {
+export default class ZoomInOut extends Transition {
   startTransitionSwap() {
     // sample fadein transition, OVERRIDE HERE
     if (!(this.idxOut === -1 || this.idxIn === -1 || this.idxOut >= this.idxIn)) {
@@ -30,27 +30,45 @@ export default class ZoomOut extends Transition {
     }
   }
 
-  startTransition() {
+  startTransition(resolve) {
     return new Promise((resolve, reject) => {
-      this.startScale = {
-        scaleX: this.out.scaleX,
-        scaleY: this.out.scaleY,
-      }
+      const halfDuration = this.duration * 0.5;
 
-      this.endScale = {
+      this.endOutOptions = this.startInOptions = {
         scaleX: 0,
         scaleY: 0,
       }
 
-      this.out.inherit(this.startScale).animate({ override: true }, this.endScale, this.duration, this.ease).then(() => {
+      this.endInOptions = {
+        scaleX: this.in.scaleX,
+        scaleY: this.in.scaleY,
+      }
+
+      this.startOutOptions = {
+        scaleX: this.out.scaleX,
+        scaleY: this.out.scaleY,
+      }
+
+      this.in.inherit(this.startInOptions).animate({ override: true, delay: halfDuration }, this.endInOptions, halfDuration, this.ease).then(() => {
         resolve();
       });
+
+      this.out.inherit(this.startOutOptions).animate({ override: true },this.endOutOptions, halfDuration, this.ease);
     });
+  }
+
+  endTransitionSwap() {
+    // sample fadein transition, OVERRIDE HERE
+    if (!(this.idxOut === -1 || this.idxIn === -1 || this.idxIn >= this.idxOut)) {
+      this.parent.removeChild(this.in);
+      this.parent.addChildAt(this.in, this.idxOut);
+    }
   }
 
   endTransition() {
     return new Promise((resolve, reject) => {
-      this.out.inherit(this.startScale);
+      this.in.inherit(this.endInOptions);
+      this.out.inherit(this.startOutOptions);
 
       resolve();
     });

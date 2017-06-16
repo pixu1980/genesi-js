@@ -63,9 +63,15 @@ export default class Transition extends Core.EventDispatcher {
   startTransition(resolve) {
     // sample fadein transition, OVERRIDE HERE, must be a promise
     return new Promise((resolve, reject) => {
-      this.in.inherit({
-        alpha: 0,
-      }).animate({ override: true }, { alpha: 1 }, this.duration, this.ease).then(() => {
+      this.startInOptions = {
+        alpha: this.in.alpha,
+      };
+
+      this.endInOptions = {
+        alpha: 0
+      };
+
+      this.in.inherit(this.startInOptions).animate({ override: true }, this.endInOptions, this.duration, this.ease).then(() => {
         resolve();
       });
     });
@@ -108,9 +114,7 @@ export default class Transition extends Core.EventDispatcher {
   endTransition() {
     // sample fadein transition, OVERRIDE HERE, must be a promise
     return new Promise((resolve, reject) => {
-      this.in.inherit({
-        alpha: 0,
-      });
+      this.in.inherit(this.endInOptions);
 
       resolve();
     });
