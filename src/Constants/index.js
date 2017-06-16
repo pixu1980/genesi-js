@@ -1,6 +1,9 @@
 import Core from '../Core';
 
 export default {
+  HORIZONTAL_MODES: ['left', 'center', 'right'],
+  VERTICAL_MODES: ['top', 'middle', 'bottom'],
+
   // Anchor constants
   TOP_LEFT: 'topleft',
   TOP_RIGHT: 'topright',
