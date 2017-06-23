@@ -84,7 +84,7 @@ export default class DisplayManager extends Core.EventDispatcher {
     this._context = this._canvas.getContext('2d');
 
     this.setSmoothing();
-    this.setCrisp();
+    this.setCrisp(true);
     this.setBicubic();
     this.setUserSelect();
     this.setTouch();
@@ -233,12 +233,12 @@ export default class DisplayManager extends Core.EventDispatcher {
   }
 
   updateSize() {
-    const scale = Math.min(window.innerWidth / this.data.canvas.width, window.innerHeight / this.data.canvas.height);
+    const scale = Math.min(window.innerWidth / this._data.canvas.ar.width, window.innerHeight / this._data.canvas.ar.height);
 
     this.set('canvas', {
       scale,
-      scaledWidth: this.data.canvas.width * scale,
-      scaledHeight: this.data.canvas.height * scale,
+      scaledWidth: this._data.canvas.ar.width * scale,
+      scaledHeight: this._data.canvas.ar.height * scale,
     }, true);
 
     Elements.Helpers.setBoxSize(this._canvas, this.get('canvas.scaledWidth'), this.get('canvas.scaledHeight'), true);

@@ -46,8 +46,8 @@ export default class Game extends Core.EventDispatcher {
 
       this.STAGE = new Elements.StageElement(this.CANVAS, {
         size: {
-          width: this.DISPLAY.get('canvas.width', 1280),
-          height: this.DISPLAY.get('canvas.height', 720),
+          width: this.DISPLAY.get('canvas.ar.width', 1280),
+          height: this.DISPLAY.get('canvas.ar.height', 720),
         },
       });
 
@@ -188,7 +188,7 @@ export default class Game extends Core.EventDispatcher {
       return;
     }
 
-    Elements.Helpers.scale(this.STAGE, this.DISPLAY.get('scale'));
+    Elements.Helpers.scale(this.STAGE, this.DISPLAY.get('canvas.scale'));
 
     this.STAGE.update();
   }
