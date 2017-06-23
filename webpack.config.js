@@ -33,6 +33,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       ƒ: 'flavor-js',
       'evolve-js': 'evolve-js',
+      'detector-js': 'detector-js',
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({ //<--key to reduce React's size
@@ -128,6 +129,12 @@ module.exports = {
         commonjs: "evolve",
         commonjs2: "evolve",
         amd: "evolve"
+      },
+      'detector-js': {
+        root: "detector",
+        commonjs: "detector",
+        commonjs2: "detector",
+        amd: "detector"
       }
     }
   ],
