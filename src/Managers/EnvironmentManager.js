@@ -1,19 +1,23 @@
+import detector from 'detector-js';
+
 import Core from '../Core';
 
+/**
+ * Manager used to detect the device support and specification. It is created
+ * by the game and can be accessed using `game.device`.
+ * 
+ * This class is based on phaser Device and System classes.
+ * 
+ * @class EnvironmentManager
+ * @constructor
+ */
 export default class EnvironmentManager extends Core.EventDispatcher {
-  constructor(data = {}, canvas = { width: 1280, height: 720 }) {
+  constructor() {
     super();
 
-    this._data = {
-      canvas,
-    }.inherit(data);
+    this._data = detector;
 
-    this.update();
     this.init();
-    // if (!!canvas) {
-    // } else {
-    //   throw new Core.Exception('Data', 'No game class instance found');
-    // }
   }
 
   get(path) {
@@ -60,21 +64,10 @@ export default class EnvironmentManager extends Core.EventDispatcher {
 
   onDataChange(e) {
     console.log('Data Changed ' + e.data);
+    
     this.dispatchEvent({
       type: 'dataChanged',
       data: e.data,
-    });
-  }
-
-  update() {
-    const scale = Math.min(window.innerWidth / this._data.canvas.width, window.innerHeight / this._data.canvas.height);
-
-    this._data.inherit({
-      scale,
-      canvas: {
-        scaledWidth: this._data.canvas.width * scale,
-        scaledHeight: this._data.canvas.height * scale,
-      },
     });
   }
 
