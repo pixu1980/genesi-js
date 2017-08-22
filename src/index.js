@@ -5,6 +5,15 @@ import Constants from './Constants';
 import Helpers from './Helpers';
 import Managers from './Managers';
 import Engine from './Engine';
+import release from '../release';
+
+const status = {
+  initialized: true,
+  version: release.version,
+  build: release.build,
+};
+
+console.log('Genesi JS initialized', status);
 
 const genesi = {
   Core,
@@ -18,6 +27,7 @@ const genesi = {
   Helpers,
   Managers,
   Engine,
+  status,
 };
 
 export default genesi;
