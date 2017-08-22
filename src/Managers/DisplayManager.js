@@ -28,7 +28,7 @@ export default class DisplayManager extends Core.EventDispatcher {
       touch: true,
       // background: false,
       fullscreen: false,
-    },
+    }
   ) {
     super();
 

@@ -72,13 +72,13 @@ export default class SceneDirector extends Core.EventDispatcher {
   var SceneManager = function(game) {
     /**
      * The game instance.
-     * @property {creatine.Game} game
+     * @property {Game} game
      */
     this.game = game;
 
     /**
      * The stage instance.
-     * @property {createjs.Stage} stage
+     * @property {Stage} stage
      */
     this.stage = game.stage;
 
@@ -118,7 +118,7 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Remove a scene from the stack.
    * @method _removeFromStack
-   * @param {creatine.Scene} scene A scene object.
+   * @param {Scene} scene A scene object.
    * @private
    */
   p._removeFromStack = function(scene) {
@@ -133,7 +133,7 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Add a scene to the stack
    * @method _addScene
-   * @param {creatine.Scene} scene A scene object.
+   * @param {Scene} scene A scene object.
    * @private
    */
   p._addScene = function(scene) {
@@ -204,8 +204,8 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Start a transition.
    * @method _startTransition
-   * @param {creatine.Scene} [outScene] The outcoming scene object.
-   * @param {creatine.Scene} [inScene] The incoming scene object.
+   * @param {Scene} [outScene] The outcoming scene object.
+   * @param {Scene} [inScene] The incoming scene object.
    * @param {Object} [transition] A transition object.
    * @param {Function} callback A callback function.
    * @private
@@ -232,8 +232,8 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Bring a given scene to the top.
    * @method _makeTop
-   * @param {creatine.Scene} scene The target scene.
-   * @param {creatine.Scene} s2 A second scene.
+   * @param {Scene} scene The target scene.
+   * @param {Scene} s2 A second scene.
    * @private
    */
   p._makeTop = function(scene, s2) {
@@ -267,7 +267,7 @@ export default class SceneDirector extends Core.EventDispatcher {
    * Register a scene to the manager.
    * @method add
    * @param {String} id The unique identifier for the scene.
-   * @param {creatine.Scene} scene The target scene.
+   * @param {Scene} scene The target scene.
    */
   p.add = function(id, scene) {
     this._sceneMap[id] = scene;
@@ -304,7 +304,7 @@ export default class SceneDirector extends Core.EventDispatcher {
    * replacing scenes.
    * 
    * @method replace
-   * @param {String or creatine.Scene} idOrScene The new scene.
+   * @param {Scene} idOrScene The new scene.
    * @param {Object} [transition] A transition effect.
   **/
   p.replace = function(idOrScene, transition) {
@@ -339,7 +339,7 @@ export default class SceneDirector extends Core.EventDispatcher {
    * replacing scenes.
    * 
    * @method push
-   * @param {String or creatine.Scene} idOrScene The new scene.
+   * @param {Scene} idOrScene The new scene.
    * @param {Object} [transition] A transition effect.
   **/
   p.push = function(idOrScene, transition) {
@@ -406,7 +406,7 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Get the previous scene from the stack.
    * @method getPreviousScene
-   * @return {creatine.Scene} The previous scene.
+   * @return {Scene} The previous scene.
    */
   p.getPreviousScene = function() {
     if (this._currentIndex >= 1) {
@@ -418,7 +418,7 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Get the current scene.
    * @method getCurrentScene
-   * @return {creatine.Scene} The current scene.
+   * @return {Scene} The current scene.
   **/
   p.getCurrentScene = function() {
     if (this._currentIndex >= 0) {
@@ -430,7 +430,7 @@ export default class SceneDirector extends Core.EventDispatcher {
   /**
    * Get the next scene.
    * @method getNextScene
-   * @return {creatine.Scene} The next scene.
+   * @return {Scene} The next scene.
   **/
   p.getNextScene = function() {
     if (this._currentIndex !== this._sceneStack.length-1) {
