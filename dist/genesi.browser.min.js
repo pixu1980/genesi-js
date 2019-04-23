@@ -1,8 +1,5 @@
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.Genesi = factory());
-}(this, function () { 'use strict';
+(function () {
+  'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -60,6 +57,8 @@
 
   /*global Window*/
 
-  return Genesi;
+  if (typeof module !== 'undefined') {
+    module.exports = Genesi;
+  }
 
-}));
+}());
